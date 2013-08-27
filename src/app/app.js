@@ -9,26 +9,18 @@
 'use strict';
 
 angular.module('app', [
-        'auth',
-        'blog',
-        'meta',
-        'nav'
     ])
 
     .config(['$routeProvider', '$httpProvider', function($routeProvider) {
         $routeProvider.when('/', {
-            templateUrl: 'app/meta/about/about.html',
-            controller: 'meta.AboutCtrl',
-            activeTab: 'about'
+            controller: 'MainCtrl'
         });
         $routeProvider.otherwise({redirectTo: '/'});
     }])
 
-    .filter('interpolate', ['version', function(version) {
-        return function(text) {
-            return String(text).replace(/\%VERSION\%/mg, version);
-        };
+    .controller('MainCtrl', ['$scope', function($scope) {
+
     }])
 
     .value('version', '0.0.1')
-    .value('_api', 'http://dev.maasive.net/SuperSpock/spencer');
+    .value('_api', 'http://localhost:8142/');
