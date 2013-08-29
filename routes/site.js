@@ -8,3 +8,7 @@ exports.pageB = function(req, res){
   res.render('site/pageB', req.viewVars);
 };
 
+exports.home = function(req, res){
+    res.render('src/index', req.viewVars);
+};
+

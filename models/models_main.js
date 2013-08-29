@@ -13,6 +13,8 @@ app.models = mongoose.models
 
 mongoose.connect(url);
 
-mongoose.models.User.count({}, function (err, num) { console.log('users:',num)  });
+mongoose.models.User.count({}, function (err, num) { 
+    console.log('users:', num);
+});
 
 module.exports = mongoose.models

@@ -1,11 +1,11 @@
-var auth = require('./auth.js')
-	, filters = require('./filters.js')
-	, site = require('./site.js')
+var auth = require('./auth.js'),
+    filters = require('./filters.js'),
+    site = require('./site.js')
 
 // SENSITIVE CODE, for now seems fine
 app.all('*', filters.setReqView )
 
-app.get( '/', site.pageA);
+app.get( '/', site.home);
 app.get( '/pageB', site.pageB);
 
 app.get( '/auth/popover', auth.popover);

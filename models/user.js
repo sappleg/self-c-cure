@@ -1,13 +1,13 @@
-var Schema = mongoose.Schema
-  , ObjectId = Schema.ObjectId
-  , Validations = require('./validations.js')
-  , salt = 'mySaltyString'
-  , SHA2 = new (require('jshashes').SHA512)()
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId,
+    Validations = require('./validations.js'),
+    salt = 'mySaltyString',
+    SHA2 = new (require('jshashes').SHA512)()
 
-function encodePassword( pass ){
-	if( typeof pass === 'string' && pass.length < 6 ) return ''
+function encodePassword(pass) {
+	if (typeof pass === 'string' && pass.length < 6) return ''
 	
-	return SHA2.b64_hmac(pass, salt )
+	return SHA2.b64_hmac(pass, salt)
 }
 
 var UserSchema = new Schema({
@@ -30,10 +30,6 @@ UserSchema.statics.classicLogin = function(login, pass, cb) {
 
 UserSchema.path('email').validate( Validations.uniqueFieldInsensitive('User', 'email' ), 'unique' )
 UserSchema.path('email').validate( Validations.emailFormat, 'format' )
-
 UserSchema.path('password').validate( Validations.cannotBeEmpty, 'password' )
-
 UserSchema.plugin( mongoose.availablePlugins.timestamper )
-
 mongoose.model('User', UserSchema)
-
