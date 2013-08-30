@@ -8,6 +8,7 @@ mongoose.availablePlugins = require('../lib/mongoose-plugins')
 var url = app.config.mongodb_url
 
 require('./user.js')
+require('./device.js')
 
 app.models = mongoose.models
 
