@@ -1,42 +1,39 @@
-exports.setReqView = function(req,res,next) {
-	
+exports.setReqView = function(req, res, next) {
+
 	// avoid losing messages in between assets request
-	var augument =  function(){
-		return req.flash('notice').join(' ')
+	var augument =  function() {
+		return req.flash('notice').join(' ');
 	}
 	
 	req.viewVars = {
 		crumbs: [],
-		flash_notice: augument, // only consumed inside views :)
+		flash_notice: augument // only consumed inside views :)
 	}
 	
-	if( req.session ){
-		if ( req.session.user ){
-			req.viewVars.welcome_login = "Welcome, Spencer"
+	if (req.session) {
+		if (req.session.user) {
+			req.viewVars.welcome_login = "Welcome, Spencer";
 		}
 	}
 	
 	// hook bread crumb
-	req.addCrumb = function ( tip, url ){
-		req.viewVars.crumbs.push( '<a href="'+url+'">'+tip+'</a>' )
+	req.addCrumb = function (tip, url){
+		req.viewVars.crumbs.push('<a href="'+url+'">'+tip+'</a>');
 	}
-	req.addCrumb( 'Start', '/' )
+	req.addCrumb('Start', '/');
 	
-	next()
+	next();
 }
 
-exports.requireLogin = function(req, res, next){
-	if( req.session ){
-		if ( req.session.user ){
-			next()
+exports.requireLogin = function(req, res, next) {
+	if (req.session) {
+		if (req.session.user) {
+			next();
 		} else {
-			req.flash('notice', 'Login required')
-			req.session.returnTo = req.originalUrl
+			req.flash('notice', 'Login required');
+			req.session.returnTo = req.originalUrl;
 			//res.redirect('/auth') not anymore.. now it should be a popup!
-			res.redirect(req.headers.referer || "/?do_signup" )
+			res.redirect(req.headers.referer || "/?do_signup");
 		}
 	}
 }
-
-//exports.setCrumb = function(req, res, next){
-//}
