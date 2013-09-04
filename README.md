@@ -5,7 +5,7 @@ Webapp code for a Fall 2013 PenApps hackathon application.
 
 
 DATA
-###
+====
 ```
 user: {
     email:
@@ -28,7 +28,7 @@ devices: [{
 ```
 
 API
-###
+===
 
 POST: auth/login/:id  
 POST,PUT,GET,DELETE: users/:id/devices/:id
