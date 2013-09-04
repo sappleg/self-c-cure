@@ -30,7 +30,7 @@ devices: [{
 API
 ---
 
-POST: auth/login/:id  
+POST: auth/login/  
 POST,PUT,GET,DELETE: users/:id/devices/:id
 
 [MIT License](http://opensource.org/licenses/MIT) (c) Thotpod 2013
