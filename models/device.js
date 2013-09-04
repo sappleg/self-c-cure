@@ -4,8 +4,8 @@ var Schema = mongoose.Schema,
 var DeviceSchema = new Schema({
     name: String,
     type: String,
-    _id: MongoDB::OID,
-    user_id: MongoDB::OID,
+    _id: Schema.Types.ObjectId,
+    user_id: Schema.Types.ObjectId,
     range: {
         start: Date,
         end: Date

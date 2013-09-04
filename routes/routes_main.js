@@ -6,7 +6,8 @@ var auth = require('./auth.js'),
 app.all('*', filters.setReqView )
 
 app.get( '/', site.home);
-app.get( '/pageB', site.pageB);
+//app.get( '/', site.pageA);
+//app.get( '/pageB', site.pageB);
 
 app.get( '/auth/popover', auth.popover);
 app.post('/auth/classic-signup', auth.classicSignup)
