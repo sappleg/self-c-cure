@@ -1,5 +1,3 @@
-
-
 exports.pageA = function(req, res){
   res.render('site/pageA', req.viewVars);
 };
@@ -11,4 +9,3 @@ exports.pageB = function(req, res){
 exports.home = function(req, res){
     res.render('src/index', req.viewVars);
 };
-
