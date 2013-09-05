@@ -27,5 +27,5 @@ angular.module('app', ['login', 'landing', 'device'
 
 
 
-    .value('version', '0.0.1')
+    //.value('version', '0.0.1')
     .value('_api', 'http://localhost:8142/');
