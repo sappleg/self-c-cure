@@ -45,7 +45,7 @@ exports.login = function(req, res, next) {
 					userId: user.get('id')
 				}
 
-                res.send({ email: req.body.email });
+                res.send({ email: req.body.email, id: user.get('id') });
 			} else { // not found
                 res.send(401);
 			}

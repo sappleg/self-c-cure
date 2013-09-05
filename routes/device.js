@@ -13,8 +13,18 @@ exports.retrieve = function(req, res) {
         res.send(404);
     }
 
-    app.models.Device.getDevices(req.param('userId'), function(err, devices) {
-        res.send(devices);
+    app.models.Device.getDevices(req.param('userId'), function(err, userDevices) {
+        if (!err) {
+            app.models.User.getUser(req.param('userId'), function(err, deviceUser) {
+                if (!err) {
+                    res.send({ user: deviceUser, devices: userDevices });
+                } else {
+                    res.send(500);
+                }
+            });
+        } else {
+            res.send(500);
+        }
     });
 }
 
