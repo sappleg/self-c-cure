@@ -1,0 +1,15 @@
+.login-contain {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: #f6f6f8;
+    z-index: 2;
+    margin-top:15%;
+    padding: 0 3% 0;
+}
+
+.login-contain .login-submit-wrap {
+    padding: 0 6% 0;
+}

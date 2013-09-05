@@ -1,0 +1,37 @@
+
+/*header*/
+.header-contain {
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    margin: 6% 0 0;
+}
+
+.header-contain p {
+    font-size:20px;
+}
+
+.header-contain form {
+    margin-top:5%;
+}
+
+.header-contain input {
+    width:90%;
+    display:inline-block;
+}
+
+.header-contain hr {
+    margin-bottom:0;
+}
+/*body*/
+.body-contain {
+    background-color: rgb(245, 245, 245);
+    padding-left: 3%;
+    overflow-y:scroll;
+}
+
+.body-contain p {
+    font-size:15px;
+}

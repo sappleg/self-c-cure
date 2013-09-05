@@ -1,10 +1,35 @@
-<div>
-    <div ng-controller="LoginCtrl">
-        <div class="row-fluid">
+<div ng-controller="LoginCtrl">
+    <div class="row">
+        <!--response col stuff here??-->
+        <div class="col-lg-offset-3 col-lg-6">
+            <div class="login-contain">
+                <h1>PennApps</h1>
+                <hr />
 
+                <form role="form">
 
+                    <div class="form-group">
+                        <label for="inputEmail">Email address</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+                    </div>
 
-            <button class="btn" ng-click="login()">Sign In</button>
+                    <div class="form-group">
+                        <label for="inputPassword">Password</label>
+                        <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                    </div>
+                    <div class="form-group" ng-init="createAccount=false" data-ng-show="createAccount">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Password">
+                    </div>
+                    <hr/>
+                    <div class="login-submit-wrap">
+                        <button type="submit" class="btn btn-primary" ng-click="login()" ng-show="swag.createAccTxt=='Create Account'">Sign In <i class="glyphicon glyphicon-log-in"></i></button>
+                        <button type="submit" class="btn btn-success" ng-click="createAcc()" ng-hide="swag.createAccTxt=='Create Account'">Confirm</button>
+                        <button type="button" class="btn btn-{{swag.createAccBtn}}" ng-click="createAccountFields()">{{swag.createAccTxt}}</button>
+                    </div>
+
+                </form>
+            </div>
         </div>
     </div>
 </div>

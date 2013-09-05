@@ -27,17 +27,11 @@ app.configure('production', function() {
 });
 
 // Configuration
-<<<<<<< HEAD
-app.configure(function(){
-    app.use(express.logger({format: app.config.logger.format }));
-    //app.use(express.logger({format: ':response-time ms - :date - :req[x-real-ip] - :method :url :user-agent / :referrer'}));
-    //app.set('view', __dirname + '/view');
-=======
+
 app.configure(function() {
     app.use(express.logger({
         format: app.config.logger.format
     }));
->>>>>>> f4da925f30756b5d267058845d4fbc8cfe204957
     app.set('views', __dirname);
     app.register('.html', swig);
     app.set('view engine', 'html');
