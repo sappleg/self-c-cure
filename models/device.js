@@ -3,14 +3,9 @@ var Schema = mongoose.Schema,
 
 var DeviceSchema = new Schema({
     name: String,
-    type: String,
-    _id: Schema.Types.ObjectId,
-    user_id: Schema.Types.ObjectId,
+    userId: Schema.Types.ObjectId,
     limit: Number,
-    range: {
-        start: Date,
-        end: Date
-    },
+    ranges: [],
     armed: Boolean
 });
 
