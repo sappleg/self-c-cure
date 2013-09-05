@@ -9,4 +9,12 @@ var DeviceSchema = new Schema({
     armed: Boolean
 });
 
+DeviceSchema.statics.getDevices = function(userId, cb) {
+    if (userId) {
+        mongoose.models.Device
+            .where('userId', userId)
+            .find({}, cb);
+    }
+}
+
 mongoose.model('Device', DeviceSchema);

@@ -9,7 +9,13 @@
 'use strict';
 
 exports.retrieve = function(req, res) {
-    console.log(req.route);
+    if (!req.param('userId')) {
+        res.send(404);
+    }
+
+    app.models.Device.getDevices(req.param('userId'), function(err, devices) {
+        res.send(devices);
+    });
 }
 
 exports.register = function(req, res) {
@@ -19,12 +25,9 @@ exports.register = function(req, res) {
 
     var device = new app.models.Device();
     device.set('name', req.body.name);
-    device.set('userId', req.body.userId);
+    device.set('userId', req.param('userId'));
     device.set('limit', req.body.limit);
     device.set('ranges', req.body.ranges);
-//    _.each(req.body.ranges, function(value) {
-//        device.ranges.push(value);
-//    });
     device.set('armed', req.body.armed);
 
     device.save(function(err) {

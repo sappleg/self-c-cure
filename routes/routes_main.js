@@ -14,5 +14,5 @@ app.get( '/', site.home);
 app.post('/auth/signup', auth.signup)
 app.post('/auth/login',  auth.login)
 
-app.get('/user/:userId?/devices/:deviceId?', device.retrieve);
-app.post('/user/:userId?/devices/:deviceId?', device.register);
+app.get('/user/:userId?', device.retrieve);
+app.post('/user/:userId?/devices/', device.register);

@@ -32,11 +32,10 @@ app.configure(function() {
     app.use(express.logger({
         format: app.config.logger.format
     }));
-    app.set('views', __dirname);
-    app.register('.html', swig);
-    app.set('view engine', 'html');
-    app.set('view options', { layout: false });
-//    app.use(require('connect').bodyParser());
+//    app.set('views', __dirname);
+//    app.register('.html', swig);
+//    app.set('view engine', 'html');
+//    app.set('view options', { layout: false });
     app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.session({ secret: 'changeME' }));
