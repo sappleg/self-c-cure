@@ -11,6 +11,7 @@
 
 .header-contain p {
     font-size:20px;
+    display:block;
 }
 
 .header-contain form {
@@ -18,7 +19,7 @@
 }
 
 .header-contain input {
-    width:90%;
+    width:45%;
     display:inline-block;
 }
 
@@ -30,6 +31,7 @@
     background-color: rgb(245, 245, 245);
     padding-left: 3%;
     overflow-y:scroll;
+    max-height: 600px;
 }
 
 .body-contain p {
