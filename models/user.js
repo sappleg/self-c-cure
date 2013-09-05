@@ -43,7 +43,7 @@ UserSchema.statics.login = function(login, pass, cb) {
 UserSchema.statics.getUser = function(userId, cb) {
     if (userId) {
         mongoose.models.User
-            .find({"email":"spencer.applegate3@gmail.com"}, cb);
+            .find({ "_id": mongoose.mongo.BSONPure.ObjectID.fromString(userId) }, cb);
     }
 }
 

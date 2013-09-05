@@ -10,11 +10,10 @@ var DeviceSchema = new Schema({
 });
 
 DeviceSchema.statics.getDevices = function(userId, cb) {
-    var MyObjectId = require('mongoose').Types.ObjectId;
-//    var userIdObj = new MyObjectId(userId);
-//    var ret;
-    mongoose.models.Device
-        .find({"userId": userId}, cb);
+    if (userId) {
+        mongoose.models.Device
+            .find({ "userId": userId }, cb);
+    }
 }
 
 mongoose.model('Device', DeviceSchema);
