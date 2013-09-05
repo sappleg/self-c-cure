@@ -7,7 +7,7 @@ exports.setReqView = function(req,res,next) {
 	
 	req.viewVars = {
 		crumbs: [],
-		flash_notice: augument, // only consumed inside views :)
+		flash_notice: augument, // only consumed inside view :)
 	}
 	
 	if( req.session ){

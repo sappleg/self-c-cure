@@ -11,7 +11,7 @@ GLOBAL.app = module.exports = express.createServer();
 app.configure('development', function() {
     app.config = JSON.parse( require('fs').readFileSync('./config/development.json', 'utf8') )
     swig.init({
-        root: __dirname + '/views',
+        root: __dirname + '/view',
         allowErrors: true,
         cache: false,
         //filters: require('./helpers/filters.js'),
@@ -21,7 +21,7 @@ app.configure('development', function() {
 app.configure('production', function(){
 	app.config = {}
     swig.init({
-        root: __dirname + '/views',
+        root: __dirname + '/view',
         allowErrors: false, // ? allows errors to be thrown and caught by express
         cache: true,
         //filters: require('./helpers/filters.js'),
@@ -32,7 +32,7 @@ app.configure('production', function(){
 app.configure(function(){
     app.use(express.logger({format: app.config.logger.format }));
     //app.use(express.logger({format: ':response-time ms - :date - :req[x-real-ip] - :method :url :user-agent / :referrer'}));
-    //app.set('views', __dirname + '/views');
+    //app.set('view', __dirname + '/view');
     app.set('views', __dirname);
     app.register('.html', swig);
     app.set('view engine', 'html');

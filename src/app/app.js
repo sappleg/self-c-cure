@@ -8,19 +8,24 @@
 
 'use strict';
 
-angular.module('app', [
+angular.module('app', ['login', 'landing', 'device'
     ])
 
     .config(['$routeProvider', '$httpProvider', function($routeProvider) {
         $routeProvider.when('/', {
-            controller: 'MainCtrl'
+            controller: 'LoginCtrl',
+            templateUrl: '/app/login/view/login.html'
+        }).when('/landing', {
+            controller: 'LandingCtrl',
+            templateUrl: '/app/landing/view/landing.html'
+        }).when('/device', {
+            controller: 'DeviceCtrl',
+            templateUrl: '/app/device/view/device.html'
         });
         $routeProvider.otherwise({redirectTo: '/'});
     }])
 
-    .controller('MainCtrl', ['$scope', function($scope) {
 
-    }])
 
     .value('version', '0.0.1')
     .value('_api', 'http://localhost:8142/');
