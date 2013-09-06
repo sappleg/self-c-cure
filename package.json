@@ -26,7 +26,7 @@
     "mongoose": "2.4.10",
     "underscore": ">=1.1.7",
     "jshashes": "1.0.4",
-    "mailer": "~0.6.7"
+    "nodemailer": "~0.5.2"
   },
   "peerDependencies": {},
   "devDependencies": {
