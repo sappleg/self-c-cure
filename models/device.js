@@ -16,4 +16,18 @@ DeviceSchema.statics.getDevices = function(userId, cb) {
     }
 }
 
+DeviceSchema.statics.updateDevice = function(deviceId, deviceData, cb) {
+    if (deviceId && deviceData) {
+        mongoose.models.Device
+            .update({ "_id": mongoose.mongo.BSONPure.ObjectID.fromString(deviceId)}, deviceData, cb);
+    }
+}
+
+DeviceSchema.statics.deleteDevice = function(deviceId, cb) {
+    if (deviceId) {
+        mongoose.models.Device
+            .remove({"_id": mongoose.mongo.BSONPure.ObjectID.fromString(deviceId)}, cb);
+    }
+}
+
 mongoose.model('Device', DeviceSchema);

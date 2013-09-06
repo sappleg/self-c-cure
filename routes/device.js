@@ -48,3 +48,31 @@ exports.register = function(req, res) {
         }
     });
 }
+
+exports.update = function(req, res) {
+    if (!req.body) {
+        res.send(404);
+    }
+
+    app.models.Device.updateDevice(req.param('deviceId'), req.body, function(err) {
+        if (!err) {
+            res.send(200);
+        } else {
+            res.send(500);
+        }
+    });
+}
+
+exports.delete = function(req, res) {
+    if (!req.body) {
+        res.send(404);
+    }
+
+    app.models.Device.deleteDevice(req.param('deviceId'), function(err) {
+        if (!err) {
+            res.send(200);
+        } else {
+            res.send(500);
+        }
+    });
+}

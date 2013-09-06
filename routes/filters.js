@@ -30,10 +30,11 @@ exports.requireLogin = function(req, res, next) {
 		if (req.session.user) {
 			next();
 		} else {
-			req.flash('notice', 'Login required');
-			req.session.returnTo = req.originalUrl;
-			//res.redirect('/auth') not anymore.. now it should be a popup!
-			res.redirect(req.headers.referer || "/?do_signup");
+//			req.flash('notice', 'Login required');
+//			req.session.returnTo = req.originalUrl;
+//			//res.redirect('/auth') not anymore.. now it should be a popup!
+//			res.redirect(req.headers.referer || "/?do_signup");
+            res.redirect('/auth/login/')
 		}
 	}
 }
