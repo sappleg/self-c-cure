@@ -41,6 +41,11 @@ app.configure(function() {
     app.use(express.session({ secret: 'changeME' }));
     app.use(app.router);
     app.use(express.static(__dirname + '/src'));
+    app.set('mailOptions', {
+        host: 'localhost',
+        port: '25',
+        from: 'spencer.applegate3@gmail.com'
+    })
 });
 
 // Show errors, keep bots away
@@ -61,8 +66,9 @@ if (!app.helpers) {
 }
 app.helpers.displayErrors = require('./helpers/form_helper.js').displayErrors;
 
-require('./models/models_main.js');
+model = require('./models/models_main.js');
 routes = require('./routes/routes_main.js');
+mailer = require('./helpers/mailer.js');
 
 app.listen(port);
 console.log(app.address());

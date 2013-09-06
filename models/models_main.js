@@ -6,6 +6,7 @@ GLOBAL.mongoose = require('mongoose');
 mongoose.set('debug', true);
 mongoose.availablePlugins = require('../lib/mongoose-plugins');
 var url = app.config.mongodb_url;
+console.log(url);
 
 require('./user.js');
 require('./device.js');
