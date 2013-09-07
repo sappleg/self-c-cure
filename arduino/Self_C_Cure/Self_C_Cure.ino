@@ -32,6 +32,20 @@ void freeRequestStrings(char* queryString, char* header, char* body) {
   body = NULL;  
 }
 
+PString buildOpenRequest(char* requestPtr) {
+  PString requestStr(requestPtr, REQUEST_BUFFER_SIZE);
+  requestStr << "GET " << deviceId << openEndpoint
+    << " HTTP/1.1" << "\n"
+    << "\n\n";
+}
+
+PString buildCloseRequest(char* requestPtr) {
+  PString requestStr(requestPtr, REQUEST_BUFFER_SIZE);
+  requestStr << "GET " << deviceId << closeEndpoint
+    << " HTTP/1.1" << "\n"
+    << "\n\n";
+}
+
 void setup() {
   // Begin processes
   Serial.begin(9600);
@@ -85,25 +99,18 @@ void loop() {
     while (1) {}
   }
   
-  // Using PString library for easy reads/writes from/into memory
-  PString requestStr(request, REQUEST_BUFFER_SIZE);
-  PString headerStr(header, HEADER_BUFFER_SIZE);
-  PString bodyStr(body, BODY_BUFFER_SIZE);
-  
   // Load request strings into memory
-  requestStr << "GET " << deviceId << 
-    << " HTTP/1.1" << "\n"
-    << "\n\n";
+  buildOpenRequest(request);
   
-  Serial << "Attempting to connect to server at " << baseEndpoint << endl;
+  Serial << "Attempting to connect to server at " << serverIp << endl;
   
-  WiFly.setRemotePort(8142);
+  WiFly.setRemotePort(serverPort);
   
-  if (WiFly.openConnection(baseEndpoint)) {
-    Serial << "Connected to server at " << baseEndpoint << endl
-           << "Sending GET: " << requestStr << endl;
+  if (WiFly.openConnection(serverIp)) {
+    Serial << "Connected to server at " << serverIp<< endl
+           << "Sending GET: " << request << endl;
     
-    WiFly << (const char*) requestStr;
+    WiFly << request;
     
     while (WiFly.isConnectionOpen()) {
       Serial << WiFly.read();
@@ -111,7 +118,7 @@ void loop() {
     
     WiFly.closeConnection();
   } else {
-    Serial << "Failed to connect to server at " << baseEndpoint << endl;
+    Serial << "Failed to connect to server at " << serverIp << endl;
   }
   
   
