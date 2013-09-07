@@ -43,7 +43,7 @@ UserSchema.statics.login = function(login, pass, cb) {
 			.where('password', encodePassword(pass))
             .findOne(cb);
 	} else {
-        cb({ message: 'login and password are not defined' });
+        cb(null, null);
     }
 }
 

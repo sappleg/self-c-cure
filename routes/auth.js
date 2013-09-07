@@ -19,9 +19,9 @@ exports.signup = function(req, res) {
 	user.set('password', req.body.pass);
 
 	user.save(function(err) {
-		if (err) { // validation failed
+		if (err) {
             res.send(err);
-		} else { // signup successful
+		} else {
 			req.session.user = {
 				id: user.get('id')
 			}
