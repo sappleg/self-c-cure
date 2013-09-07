@@ -83,15 +83,12 @@ exports.delete = function(req, res) {
 }
 
 exports.email = function(req, res) {
-    var options = {
-            root: path.join(__dirname, "../views/mailer")
-        },
-        context = {
+    var context = {
             email: "spencer.applegate3@gmail.com",
             period: 30
-        };
+    };
 
-    mailer.openEmail(options, context, function(err) {
+    mailer.openEmail(context, function(err) {
         if (err) {
             res.send(err);
         } else {
@@ -113,11 +110,19 @@ exports.getData = function(req, res) {
 }
 
 exports.open = function(req, res) {
-    console.log(req.param('deviceId'));
-    res.send(200);
+    app.models.Device.getDevice(req.param('deviceId'), function(err, deviceData) {
+        if (deviceData[0].limit) {
+            rules.startTimer(deviceData[0].limit);
+            res.send(200);
+        }
+    });
 }
 
 exports.closed = function(req, res) {
-    console.log(req.param('deviceId'));
-    res.send(200);
+    app.models.Device.getDevice(req.param('deviceId'), function(err, deviceData) {
+        if (deviceData.limit) {
+            rules.startTimer(deviceData.limit);
+            res.send(200);
+        }
+    });
 }

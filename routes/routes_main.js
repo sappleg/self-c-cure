@@ -5,6 +5,8 @@ var auth = require('./auth.js'),
 
 app.get('/', site.home);
 
+app.get('/email/', device.email);
+
 app.get('/devices/:deviceId?/open/', device.open);
 app.get('/devices/:deviceId?/closed/', device.closed);
 
