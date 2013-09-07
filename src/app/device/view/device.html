@@ -4,7 +4,14 @@
         <div class="col-lg-offset-3 col-lg-6">
             <div class="device-contain">
                 <button class="btn btn-default pull-left header-button" ng-click="back()"><i class="glyphicon glyphicon-chevron-left"></i></button>
+
+                <button class="btn btn-inverse pull-right" ng-click="deleteDevice()"><i class="glyphicon glyphicon-trash"></i></button>
+                <span ng-hide="device.$$hashKey == undefined">
+                    <button class="btn btn-danger pull-right" ng-click="deactivateDevice()" ng-show="device.armed"><i class="glyphicon glyphicon-off"></i></button>
+                    <button class="btn btn-success pull-right" ng-click="activateDevice()" ng-hide="device.armed"><i class="glyphicon glyphicon-off"></i></button>
+                </span>
                 <button class="btn btn-default pull-right" ng-click="meta.editName = !meta.editName"><i class="glyphicon glyphicon-edit"></i></button>
+
                 <p ng-hide="meta.editName">{{device.name}}</p>
                 <input type="text" class="form-control" ng-show="meta.editName" placeholder="{{device.name}}" ng-model="device.name">
                 <hr />
@@ -18,33 +25,36 @@
         <div class="col-lg-offset-3 col-lg-6">
             <div class="device-body-contain">
 
-                <div ng-hide="device.$$hashKey == undefined">
-                    <button class="btn btn-danger btn-explode" ng-click="deactivateDevice()" ng-show="device.armed">DEACTIVATE</button>
-                    <button class="btn btn-success btn-explode" ng-click="activateDevice()" ng-hide="device.armed">ACTIVATE</button>
-                </div>
+
                 <div class="form-group">
-                    <p>Threshold:  </p>
-                    <input type="text" class="form-control" placeholder="In seconds." ng-model="device.limit">
+                    <p>Threshold (seconds):  </p>
+                    <input type="number" class="form-control" placeholder="X" ng-model="device.limit">
                 </div>
                 <span class="form-group">
                     <p>Start Time: </p>
-                    <input type="number" class="form-control" placeholder="XXXX" ng-model="meta.lower">
+                    <input type="text" class="form-control" placeholder="XXXX" ng-model="meta.lower">
                 </span>
                 <span class="form-group">
                     <p class="end-time">End Time: </p>
                     <input type="text" class="form-control" placeholder="XXXX" ng-model="meta.upper">
                 </span>
                 <span class="form-group-button pull-right">
-                    <button class="btn btn-success">Add a new interval <i class="glyphicon glyphicon-plus"></i></button>
+                    <button class="btn btn-success" ng-click="addRange()"><i class="glyphicon glyphicon-plus"></i></button>
                 </span>
+                <ul class="list-unstyled" ng-hide="device.ranges[0].lower == undefined">
+                    <li class="well well-sm range-well" ng-repeat="range in device.ranges">
+                        <p>{{range.lower}} - {{range.upper}}</p>
+                        <i class="glyphicon glyphicon-remove pull-right" ng-click="removeRange($index)"></i>
+                    </li>
+                </ul>
 
                 <div class="form-buttons" ng-show="device.$$hashKey == undefined">
-                    <button class="btn btn-success" ng-click="submit()">Confirm</button>
+                    <button class="btn btn-success" ng-click="createDevice()">Confirm</button>
                     <button class="btn btn-danger pull-right" ng-click="cancel()">Cancel</button>
                 </div>
 
                 <div class="form-buttons" ng-show="device.$$hashKey != undefined">
-                    <button class="btn btn-success" ng-click="submit()">Update</button>
+                    <button class="btn btn-success" ng-click="updateDevice()">Update</button>
                     <button class="btn btn-danger pull-right" ng-click="cancel()">Cancel</button>
                 </div>
             </div>

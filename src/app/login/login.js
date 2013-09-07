@@ -18,11 +18,11 @@ angular.module('login', function () {})
         $scope.user = {
             email: '',
             password: ''
-        }
+        };
         $scope.meta = {
             confirmPass: '',
             error:''
-        }
+        };
 
         $scope.login = function () {
             console.log('here');
@@ -34,8 +34,6 @@ angular.module('login', function () {})
                     "pass": $scope.user.pass
                 });
             $http.post(path, body).then(function(response) {
-                console.log(response);
-                console.log('alpha as fuck');
                 if(response.status == '200' && response.data.message != "Validation failed") {
                     $scope.user.email = '';
                     $scope.user.pass = '';
@@ -46,9 +44,7 @@ angular.module('login', function () {})
 
 
                     $http.get(path).then(function (response) {
-                        console.log(response);
-                        console.log('beta as fuck');
-                        userData.setUser(response.data);
+                        userData.setUserData(response.data);
                         $location.path('/landing');
                     }, function (response) {
                         console.log(response);
@@ -59,7 +55,6 @@ angular.module('login', function () {})
                 }
 
             }, function(response) {
-                console.log(response);
                 $scope.meta.error = "Shit something went wrong, please try again."
             });
         };
@@ -121,13 +116,5 @@ angular.module('login', function () {})
             $scope.user.email = '';
             $scope.user.pass = '';
             $scope.meta.confirmPassword = '';
-        }
-
-        var getUser = function () {
-            $http.get(path).then(function(data) {
-                console.log(data);
-            }, function() {
-
-            });
         }
     }]);

@@ -10,12 +10,8 @@
 angular.module('landing', function () {})
     .controller('LandingCtrl', ['$scope', '$location', '$http', 'dummyData', 'userData', 'deviceData',
         function($scope, $location, $http, dummyData, userData, deviceData) {
-            $scope.user = userData.user.user[0];
-            $scope.devices = userData.user.devices;
-            console.log($scope.devices);
-            console.log(userData);
-            //dummyData.genDummyData(20);
-
+            $scope.userData = userData;
+            console.log($scope.userData);
             $scope.meta = {
                 id: '',
                 name: '',
@@ -33,18 +29,15 @@ angular.module('landing', function () {})
                     //prep json for jump
                     var device = {
                         name: $scope.meta.name,
-                        userId: $scope.user._id,
-                        _id: $scope.meta.id,
+                        userId: $scope.user.user._id,
+                        deviceId: $scope.meta.id,
                         limit: null,
-                        ranges: [{
-                            lower: null,
-                            upper: null
-                        }],
+                        ranges: [],
                         armed: false
                     };
 
                     console.log(device);
-                    deviceData.setDevice(device);
+                    deviceData.setDeviceData(device);
                     $location.path('/device');
                 }
                 else if($scope.meta.name = '') {
@@ -56,48 +49,70 @@ angular.module('landing', function () {})
             };
 
             $scope.goToDevice = function ($index) {
-                console.log($scope.devices[$index]);
-                deviceData.setDevice($scope.devices[$index]);
+                console.log($scope.userData.devices[$index]);
+                deviceData.setDeviceData($scope.userData.devices[$index]);
                 $location.path('/device');
             };
 
             $scope.activateDevice = function ($index) {
-                $scope.devices[$index].armed = true;
+                $scope.userData.devices[$index].armed = true;
 
                 var start = 'http://localhost:8142/user/',
-                    userID = $scope.user._id,
+                    userID = $scope.user.user._id,
                     device = '/devices/',
-                    deviceID = $scope.devices[$index]._id;
+                    deviceID = $scope.userData.devices[$index]._id;
                 var path = start.concat(userID).concat(device).concat(deviceID);
-                var body = $scope.devices[$index];
+                var body = cleanData($scope.userData.devices[$index]);
 
 
                 $http.put(path, body).then(function(response) {
                     console.log(response);
-                    console.log('alpha as fuck!!');
+                    var path = start.concat(userID);
+                    $http.get(path).then(function(response) {
+                        userData.setUserData(response.data);
+                        $location.path('/landing');
+                    }, function(response) {
+
+                    });
                 }, function(response) {
                     console.log(response);
                 });
             };
 
             $scope.deactivateDevice = function ($index) {
-                $scope.devices[$index].armed = false;
+                $scope.userData.devices[$index].armed = false;
 
                 var start = 'http://localhost:8142/user/',
-                    userID = $scope.user._id,
+                    userID = $scope.user.user._id,
                     device = '/devices/',
-                    deviceID = $scope.devices[$index]._id;
+                    deviceID = $scope.userData.devices[$index]._id;
                 var path = start.concat(userID).concat(device).concat(deviceID);
-                var body = $scope.devices[$index];
+                var body = cleanData($scope.userData.devices[$index]);
 
 
                 $http.put(path, body).then(function(response) {
                     console.log(response);
                     console.log('alpha as fuck!!');
+
+                    var path = start.concat(userID);
+                    $http.get(path).then(function(response) {
+                        userData.setUserData(response.data);
+                        $location.path('/landing');
+                    }, function(response) {
+
+                    });
                 }, function(response) {
                     console.log(response);
                 });
             };
+
+            var cleanData = function (dirtyD) {
+                var copy = {};
+                copy = angular.copy(dirtyD, copy);
+                delete copy['$$hashKey'];
+                delete copy['_id'];
+                return copy;
+            }
     }])
     .service('dummyData', [
         function () {
@@ -148,11 +163,12 @@ angular.module('landing', function () {})
             }
 
         }])
-    .factory('userData', [
+    .service('userData', [
         function () {
-            this.user = {};
-            this.user.setUser = function (u) {
-                this.user = u;
+            this.setUserData = function (u) {
+                this.user = u.user[0];
+                this.devices = u.devices;
             };
-            return this.user;
+
+            return this;
         }]);
