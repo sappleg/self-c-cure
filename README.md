@@ -12,19 +12,16 @@ user: {
     id:
 }
 
-devices: [{
-    name:
-    type: 
-    user_id:
-    rules: {
-        limit: integer,
-        ranges: [{
-            start: time,
-            end: time
-        }]
-    }
-    armed:
-}]
+device: {
+    name: String,
+    userId: ObjectId,
+    limit: Number,
+    ranges: [{
+        start: Number (####),
+        end: Number (####)
+    }],
+    armed: Boolean
+}
 ```
 
 API
