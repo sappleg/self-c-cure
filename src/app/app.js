@@ -8,10 +8,26 @@
 
 'use strict';
 
-angular.module('app', ['login', 'landing', 'device'
-    ])
+var app = angular.module('app', ['login', 'landing', 'device']);
 
-    .config(['$routeProvider', '$httpProvider', function($routeProvider) {
+app.factory('Authentication', ['$location', '$q', function($location, $q) {
+    return function (promise) {
+        console.log('called', promise);
+        return promise.then(
+            function(response) {
+                return response;
+            },
+            function(response) {
+                if (response.status === 401) {
+                    $location.path('/');
+                }
+                return response;
+            }
+        )
+    };
+}])
+
+app.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
         $routeProvider.when('/', {
             controller: 'LoginCtrl',
             templateUrl: '/app/login/view/login.html'
@@ -23,9 +39,7 @@ angular.module('app', ['login', 'landing', 'device'
             templateUrl: '/app/device/view/device.html'
         });
         $routeProvider.otherwise({redirectTo: '/'});
+        $httpProvider.responseInterceptors.push('Authentication');
     }])
-
-
-
-    //.value('version', '0.0.1')
     .value('_api', 'http://localhost:8142/');
+
