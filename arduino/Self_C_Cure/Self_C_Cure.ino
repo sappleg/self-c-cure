@@ -34,9 +34,8 @@ void freeRequestStrings(char* queryString, char* header, char* body) {
   body = NULL;  
 }
 
-// Arduino setup
 void setup() {
-  // begin processes
+  // Begin processes
   Serial.begin(9600);
   WiFly.begin();
   
@@ -44,17 +43,21 @@ void setup() {
   WiFly.setDebugChannel( (Print*) &Serial);
   #endif
   
-  // should be configured through wired network config interface
+  // Should be configured through wired network config interface
   WiFly.setAuthMode(WIFLY_AUTH_WPA2_PSK);
   WiFly.setDHCPMode(WIFLY_DHCP_ON);
   WiFly.setJoinMode(WIFLY_JOIN_AUTO);
   WiFly.setSSID(ssid);
   WiFly.setPassphrase(passphrase);
   
+  Serial << "Attempting to join " << ssid << endl;
   if (WiFly.join()) {
     Serial << "Connected to " << ssid << endl;
   } else {
     Serial << "Failed to connect to " << ssid << endl;
+    
+    // Halt execution
+    while (1) {}
   }
   
   Serial << "Waiting for network configuration..." << endl;
@@ -68,22 +71,28 @@ void loop() {
   int freeMemoryStart = freeMemory();
   #endif
   
+  // Allocate memory for request strings
   char* queryString = (char*) malloc(QUERY_STRING_BUFFER_SIZE);
   char* header = (char*) malloc(HEADER_BUFFER_SIZE);
   char* body = (char*) malloc(BODY_BUFFER_SIZE);
   
+  // Always null check after mallocs in case of heap overflow
   if (queryString == NULL || header == NULL || body == NULL) {
     Serial << "Heap Overflow Error";
     freeRequestStrings(queryString, header, body);
     
-    // halt execution
+    // Halt execution
     while (1) {}
   }
   
+  // Using PString library for easy writes into memory
   PString queryStr(queryString, QUERY_STRING_BUFFER_SIZE);
   PString headerStr(header, HEADER_BUFFER_SIZE);
   PString bodyStr(body, BODY_BUFFER_SIZE);
   
+  
+  
+  // Free allocated memory
   freeRequestStrings(queryString, header, body);
   
   #if DEBUG_ON
