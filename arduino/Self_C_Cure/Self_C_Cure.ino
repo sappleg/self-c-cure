@@ -72,39 +72,51 @@ void loop() {
   #endif
   
   // Allocate memory for request strings
-  char* queryString = (char*) malloc(REQUEST_BUFFER_SIZE);
+  char* request = (char*) malloc(REQUEST_BUFFER_SIZE);
   char* header = (char*) malloc(HEADER_BUFFER_SIZE);
   char* body = (char*) malloc(BODY_BUFFER_SIZE);
   
   // Always null check after mallocs in case of heap overflow
-  if (queryString == NULL || header == NULL || body == NULL) {
+  if (request == NULL || header == NULL || body == NULL) {
     Serial << "Heap Overflow Error" << endl;
-    freeRequestStrings(queryString, header, body);
+    freeRequestStrings(request, header, body);
     
     // Halt execution
     while (1) {}
   }
   
   // Using PString library for easy reads/writes from/into memory
-  PString queryStr(queryString, REQUEST_BUFFER_SIZE);
+  PString requestStr(request, REQUEST_BUFFER_SIZE);
   PString headerStr(header, HEADER_BUFFER_SIZE);
   PString bodyStr(body, BODY_BUFFER_SIZE);
   
   // Load request strings into memory
-  queryStr << baseEndpoint;
+  requestStr << "GET " << deviceId << 
+    << " HTTP/1.1" << "\n"
+    << "\n\n";
   
-  Serial << "Attempting to connect to server at " << queryStr << endl;
-  if (WiFly.openConnection(queryStr)) {
-    Serial << "Connected to server at " << queryString << endl;
+  Serial << "Attempting to connect to server at " << baseEndpoint << endl;
+  
+  WiFly.setRemotePort(8142);
+  
+  if (WiFly.openConnection(baseEndpoint)) {
+    Serial << "Connected to server at " << baseEndpoint << endl
+           << "Sending GET: " << requestStr << endl;
+    
+    WiFly << (const char*) requestStr;
+    
+    while (WiFly.isConnectionOpen()) {
+      Serial << WiFly.read();
+    }
     
     WiFly.closeConnection();
   } else {
-    Serial << "Failed to connect to server at " << queryString << endl;
+    Serial << "Failed to connect to server at " << baseEndpoint << endl;
   }
   
   
   // Free allocated memory
-  freeRequestStrings(queryString, header, body);
+  freeRequestStrings(request, header, body);
   
   #if DEBUG_ON
   int freeMemoryFinish = freeMemory();
