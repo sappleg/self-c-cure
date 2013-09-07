@@ -37,15 +37,11 @@ exports.signup = function(req, res) {
 };
 
 exports.login = function(req, res, next) {
-//	if (!req.body) {
-//	    return res.send(404);
-//	}
-	
 	app.models.User.login(req.body.email, req.body.pass, function(err, user) {
-		if (err) { // validation failed
+		if (err) {
             res.send(400, err);
 		} else {
-			if (user) { // login
+			if (user) {
 				req.session.user = {
 					id: user.get('id')
 				}
@@ -60,7 +56,7 @@ exports.login = function(req, res, next) {
                 } else {
                     next();
                 }
-			} else { // not found
+			} else {
                 if (req.url == '/auth/signup/') {
                     next();
                 } else {
