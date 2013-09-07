@@ -5,6 +5,9 @@ var auth = require('./auth.js'),
 
 app.get('/', site.home);
 
+app.get('/devices/:deviceId?/open/', device.open);
+app.get('/devices/:deviceId?/closed/', device.closed);
+
 /* Device modification */
 app.put('/user/:userId?/devices/:deviceId?', device.update);
 app.delete('/user/:userId?/devices/:deviceId?', device.delete);
@@ -18,5 +21,3 @@ app.post('/user/:userId?/devices/', device.register);
 /* Authentication */
 app.post('/auth/signup/', auth.signup)
 app.post('/auth/login/',  auth.login)
-
-

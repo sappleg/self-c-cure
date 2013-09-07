@@ -4,6 +4,7 @@ var Schema = mongoose.Schema,
 var DeviceSchema = new Schema({
     name: String,
     userId: Schema.Types.ObjectId,
+    deviceId: String,
     limit: Number,
     ranges: [],
     armed: Boolean
@@ -19,14 +20,34 @@ DeviceSchema.statics.getDevices = function(userId, cb) {
 DeviceSchema.statics.updateDevice = function(deviceId, deviceData, cb) {
     if (deviceId && deviceData) {
         mongoose.models.Device
-            .update({ "_id": mongoose.mongo.BSONPure.ObjectID.fromString(deviceId)}, deviceData, cb);
+            .update({ "deviceId": deviceId }, deviceData, cb);
     }
 }
 
 DeviceSchema.statics.deleteDevice = function(deviceId, cb) {
     if (deviceId) {
         mongoose.models.Device
-            .remove({"_id": mongoose.mongo.BSONPure.ObjectID.fromString(deviceId)}, cb);
+            .remove({ "deviceId": deviceId }, cb);
+    }
+}
+
+//DeviceSchema.statics.updateDevice = function(deviceId, deviceData, cb) {
+//    if (deviceId && deviceData) {
+//        mongoose.models.Device
+//            .update({ "_id": mongoose.mongo.BSONPure.ObjectID.fromString(deviceId)}, deviceData, cb);
+//    }
+//}
+//
+//DeviceSchema.statics.deleteDevice = function(deviceId, cb) {
+//    if (deviceId) {
+//        mongoose.models.Device
+//            .remove({"_id": mongoose.mongo.BSONPure.ObjectID.fromString(deviceId)}, cb);
+//    }
+//}
+
+DeviceSchema.statics.getDeviceData = function(deviceId, data, cb) {
+    if (deviceId && data) {
+        console.log(deviceId, data);
     }
 }
 
