@@ -17,7 +17,7 @@
 
 angular.module('device', function () {})
 
-    .controller('DeviceCtrl', ['$scope', '$http', '$location', 'deviceData', 'userData', 'endpoint'
+    .controller('DeviceCtrl', ['$scope', '$http', '$location', 'deviceData', 'userData', 'endpoint',
         function($scope, $http, $location, deviceData, userData, endpoint) {
 
             $scope.meta = {

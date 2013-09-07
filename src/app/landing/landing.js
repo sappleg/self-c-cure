@@ -8,7 +8,7 @@
 
 
 angular.module('landing', function () {})
-    .controller('LandingCtrl', ['$scope', '$location', '$http', 'dummyData', 'userData', 'deviceData', 'endpoint'
+    .controller('LandingCtrl', ['$scope', '$location', '$http', 'dummyData', 'userData', 'deviceData', 'endpoint',
         function($scope, $location, $http, dummyData, userData, deviceData, endpoint) {
             $scope.userData = userData;
             console.log($scope.userData);

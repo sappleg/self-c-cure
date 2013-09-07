@@ -9,7 +9,7 @@
 
 
 angular.module('login', function () {})
-    .controller('LoginCtrl', ['$scope', '$location', '$http', 'userData', 'endpoint'
+    .controller('LoginCtrl', ['$scope', '$location', '$http', 'userData', 'endpoint',
         function($scope, $location, $http, userData, endpoint) {
         $scope.swag = {
             createAccTxt: "Create Account",
