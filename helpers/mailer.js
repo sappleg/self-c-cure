@@ -23,7 +23,7 @@ var smtpTransport = nodemailer.createTransport("SMTP",{
 // setup e-mail data with unicode symbols
 var mailOptions = {
     from: "self.c.cure@gmail.com", // sender address
-    to: "bar@blurdybloop.com, baz@blurdybloop.com", // list of receivers
+    to: "spencer.applegate3@gmail.com", // list of receivers
     subject: "Hello ✔", // Subject line
     text: "Hello world ✔", // plaintext body
     html: "<b>Hello world ✔</b>" // html body
@@ -38,5 +38,5 @@ smtpTransport.sendMail(mailOptions, function(error, response){
     }
 
     // if you don't want to use this transport object anymore, uncomment following line
-    //smtpTransport.close(); // shut down the connection pool, no more messages
+    smtpTransport.close(); // shut down the connection pool, no more messages
 });
