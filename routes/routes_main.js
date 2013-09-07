@@ -3,8 +3,6 @@ var auth = require('./auth.js'),
     filters = require('./filters.js'),
     site = require('./site.js')
 
-app.get('/', site.home);
-
 app.get('/email/', device.email);
 
 app.get('/devices/:deviceId?/open/', device.open);

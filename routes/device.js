@@ -83,23 +83,36 @@ exports.delete = function(req, res) {
 }
 
 exports.open = function(req, res) {
-    app.models.Device.getDevice(req.param('deviceId'), function(err, deviceData) {
-        if (deviceData[0].limit) {
-            rules.startTimer(req.param('deviceId'), deviceData[0].limit);
-            res.send(200);
-        } else {
-            res.send(404);
+    app.models.Device.getDevice(req.param('deviceId'), function(err, device) {
+        if (device[0].armed) {
+            var limit = device[0].limit;
+            var ranges = device[0].ranges;
+            if (limit && ranges) {
+                rules.startTimer(device[0]);
+                rules.checkRange(device[0]);
+                res.send(200);
+            } else if (limit && !ranges ) {
+                rules.startTimer(device[0]);
+                res.send(200);
+            } else if (!limit && ranges) {
+                rules.checkRange(device[0]);
+                res.send(200);
+            } else {
+                res.send(404);
+            }
         }
     });
 }
 
 exports.closed = function(req, res) {
     app.models.Device.getDevice(req.param('deviceId'), function(err, deviceData) {
-        if (deviceData[0].limit) {
-            rules.stopTimer(req.param('deviceId'));
-            res.send(200);
-        } else {
-            res.send(404);
+        if (device[0].armed) {
+            if (deviceData[0].limit) {
+                rules.stopTimer(req.param('deviceId'));
+                res.send(200);
+            } else {
+                res.send(404);
+            }
         }
     });
 }
