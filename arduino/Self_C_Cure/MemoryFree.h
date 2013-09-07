@@ -1,7 +1,7 @@
 // memoryFree header
 
-#ifndef	MEMORY_FREE_H
-#define MEMORY_FREE_H
+#ifndef	MEMORY_FREE
+#define MEMORY_FREE
 
 #ifdef __cplusplus
 extern "C" {
