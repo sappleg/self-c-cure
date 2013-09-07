@@ -3,7 +3,7 @@
 #define DEVICE_CONSTANTS
 
 char deviceId[] = "spencerisafag/";
-char baseEndpoint[] = "http://self-c-cure.thotpod.com:8142/";
+char baseEndpoint[] = "192.237.168.24/";
 char openEndpoint[] = "open/";
 char closeEndpoint[] = "closed/";
 
