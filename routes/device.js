@@ -82,47 +82,24 @@ exports.delete = function(req, res) {
     });
 }
 
-exports.email = function(req, res) {
-    var context = {
-            email: "spencer.applegate3@gmail.com",
-            period: 30
-    };
-
-    mailer.openEmail(context, function(err) {
-        if (err) {
-            res.send(err);
-        } else {
-            res.send(200);
-        }
-    });
-}
-
-exports.getData = function(req, res) {
-    if (!req.body) {
-        res.send(404);
-    }
-
-    app.models.Device.getDeviceData(req.body.id, function(err) {
-        if (err) {
-            res.send(err);
-        }
-    })
-}
-
 exports.open = function(req, res) {
     app.models.Device.getDevice(req.param('deviceId'), function(err, deviceData) {
         if (deviceData[0].limit) {
-            rules.startTimer(deviceData[0].limit);
+            rules.startTimer(req.param('deviceId'), deviceData[0].limit);
             res.send(200);
+        } else {
+            res.send(404);
         }
     });
 }
 
 exports.closed = function(req, res) {
     app.models.Device.getDevice(req.param('deviceId'), function(err, deviceData) {
-        if (deviceData.limit) {
-            rules.startTimer(deviceData.limit);
+        if (deviceData[0].limit) {
+            rules.stopTimer(req.param('deviceId'));
             res.send(200);
+        } else {
+            res.send(404);
         }
     });
 }
