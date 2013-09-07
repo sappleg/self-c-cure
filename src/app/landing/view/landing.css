@@ -11,7 +11,10 @@
 
 .header-contain p {
     font-size:20px;
-    display:block;
+}
+
+.header-contain label {
+    min-width:100%;
 }
 
 .header-contain form {
