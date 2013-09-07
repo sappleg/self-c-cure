@@ -9,7 +9,9 @@
 'use strict';
 
 var nodemailer = require('nodemailer'),
-    email;
+    emailTemplates = require('swig-email-templates'),
+    path = require('path');
+
 
 // create reusable transport method (opens pool of SMTP connections)
 var smtpTransport = nodemailer.createTransport("SMTP",{
@@ -20,23 +22,32 @@ var smtpTransport = nodemailer.createTransport("SMTP",{
     }
 });
 
-// setup e-mail data with unicode symbols
-var mailOptions = {
-    from: "self.c.cure@gmail.com", // sender address
-    to: "spencer.applegate3@gmail.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world ✔", // plaintext body
-    html: "<b>Hello world ✔</b>" // html body
-}
+exports.openEmail = function(options, context, cb) {
+    emailTemplates(options, function(err, render) {
+        render('open.html', context, function(err, html) {
+            // setup e-mail data with unicode symbols
+            var mailOptions = {
+                from: "self.c.cure@gmail.com", // sender address
+                to: "spencer.applegate3@gmail.com", // list of receivers
+                subject: "Hello", // Subject line
+                text: html, // plaintext body
+                html: html
+            }
 
-// send mail with defined transport object
-smtpTransport.sendMail(mailOptions, function(error, response){
-    if(error){
-        console.log(error);
-    }else{
-        console.log("Message sent: " + response.message);
-    }
+            // send mail with defined transport object
+            smtpTransport.sendMail(mailOptions, function(error, response){
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log("Message sent: " + response.message);
+                }
 
-    // if you don't want to use this transport object anymore, uncomment following line
-    smtpTransport.close(); // shut down the connection pool, no more messages
-});
+                // if you don't want to use this transport object anymore, uncomment following line
+                smtpTransport.close(); // shut down the connection pool, no more messages
+            });
+        });
+
+        cb();
+    });
+};
+

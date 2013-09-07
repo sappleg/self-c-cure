@@ -68,7 +68,8 @@ app.helpers.displayErrors = require('./helpers/form_helper.js').displayErrors;
 
 model = require('./models/models_main.js');
 routes = require('./routes/routes_main.js');
-mailer = require('./helpers/mailer.js');
+//app.mailer = require('./helpers/mailer.js');
+//console.log(app.mailer);
 
 app.listen(port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
