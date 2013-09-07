@@ -4,11 +4,15 @@
 #include <SoftwareSerial.h>
 #include <WiFlySerial.h>
 #include <PString.h>
+
 #include "Credentials.h"
+#include "Device_Constants.h"
+#include "MemoryFree.h"
 
 // Precompiler definitions
 #define RX_PIN 2
 #define TX_PIN 3
+#define DEBUG_ON 1
 #define REQUEST_BUFFER_SIZE 80
 #define QUERY_STRING_BUFFER_SIZE 100
 #define HEADER_BUFFER_SIZE 120
@@ -35,7 +39,10 @@ void setup() {
   // begin processes
   Serial.begin(9600);
   WiFly.begin();
+  
+  #if DEBUG_ON
   WiFly.setDebugChannel( (Print*) &Serial);
+  #endif
   
   // should be configured through wired network config interface
   WiFly.setAuthMode(WIFLY_AUTH_WPA2_PSK);
@@ -57,6 +64,10 @@ void setup() {
 }
 
 void loop() {
+  #if DEBUG_ON
+  int freeMemoryStart = freeMemory();
+  #endif
+  
   char* queryString = (char*) malloc(QUERY_STRING_BUFFER_SIZE);
   char* header = (char*) malloc(HEADER_BUFFER_SIZE);
   char* body = (char*) malloc(BODY_BUFFER_SIZE);
@@ -74,6 +85,15 @@ void loop() {
   PString bodyStr(body, BODY_BUFFER_SIZE);
   
   freeRequestStrings(queryString, header, body);
+  
+  #if DEBUG_ON
+  int freeMemoryFinish = freeMemory();
+  if (freeMemoryStart != freeMemoryFinish) {
+    Serial << "Memory leak detected:" << endl
+           << "Free memory before:" << freeMemoryStart << endl
+           << "Free memory after:" << freeMemoryFinish << endl;
+  }
+  #endif
   
   delay(5000);
 }
