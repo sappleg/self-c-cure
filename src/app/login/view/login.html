@@ -3,7 +3,7 @@
         <!--response col stuff here??-->
         <div class="col-lg-offset-3 col-lg-6">
             <div class="login-contain">
-                <h1>PennApps</h1>
+                <h1>SelfsyCure</h1>
                 <hr />
 
                 <form role="form">
@@ -15,11 +15,11 @@
 
                     <div class="form-group">
                         <label for="inputPassword">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password">
+                        <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.pass">
                     </div>
                     <div class="form-group" ng-init="createAccount=false" data-ng-show="createAccount">
                         <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Password">
+                        <input type="password" class="form-control" id="confirmPassword" ng-model="meta.confirmPass">
                     </div>
                     <hr/>
                     <div class="login-submit-wrap">
@@ -27,7 +27,7 @@
                         <button type="submit" class="btn btn-success" ng-click="createAcc()" ng-hide="swag.createAccTxt=='Create Account'">Confirm</button>
                         <button type="button" class="btn btn-{{swag.createAccBtn}}" ng-click="createAccountFields()">{{swag.createAccTxt}}</button>
                     </div>
-
+                    {{meta.error}}
                 </form>
             </div>
         </div>

@@ -9,20 +9,78 @@
 
 angular.module('landing', function () {})
 
-    .controller('LandingCtrl', ['$scope', '$location', 'dummyData',
-        function($scope, $location, dummyData) {
-            $scope.user = {
-                email: "hunter@gmail.com",
-                id: ""
-            }
-            $scope.devices = dummyData.genDummyData(20);
+    .controller('LandingCtrl', ['$scope', '$location', '$http', 'dummyData', 'userData', 'deviceData',
+        function($scope, $location, $http, dummyData, userData, deviceData) {
+            $scope.user = userData.user.user[0];
+            $scope.devices = userData.user.devices;
+            console.log($scope.devices);
+            console.log(userData);
+            //dummyData.genDummyData(20);
+
+            $scope.meta = {
+                id: '',
+                name: ''
+            };
 
             $scope.logout = function () {
                 //logout user
                 $location.path('/');
-            }
+            };
 
-    }])
+            $scope.jumpDevice = function () {
+
+                // ensure meta data is valid here before JUMP
+
+
+            };
+
+            $scope.goToDevice = function ($index) {
+                console.log($scope.devices[$index]);
+                deviceData.setDevice($scope.devices[$index]);
+                $location.path('/device');
+            };
+
+            $scope.activateDevice = function ($index) {
+                $scope.devices[$index].armed = true;
+
+                var start = 'http://localhost:8142/user/',
+                    userID = $scope.user._id,
+                    device = '/devices/',
+                    deviceID = $scope.devices[$index]._id,
+                    trail = '/';
+                var path = start.concat(userID).concat(device).concat(deviceID).concat(trail);
+                var body = $scope.devices[$index];
+
+
+                $http.put(path, body).then(function(response) {
+                    console.log(response);
+                    console.log('alpha as fuck!!');
+                }, function(response) {
+                    console.log(response);
+                });
+            };
+
+            $scope.deactivateDevice = function ($index) {
+                $scope.devices[$index].armed = false;
+
+                var start = 'http://localhost:8142/user/',
+                    userID = $scope.user._id,
+                    device = '/devices/',
+                    deviceID = $scope.devices[$index]._id,
+                    trail = '/';
+                var path = start.concat(userID).concat(device).concat(deviceID).concat(trail);
+                var body = $scope.devices[$index];
+
+
+                $http.put(path, body).then(function(response) {
+                    console.log(response);
+                    console.log('alpha as fuck!!');
+                }, function(response) {
+                    console.log(response);
+                });
+            };
+
+        }])
     .service('dummyData', [
         function () {
 
@@ -71,4 +129,12 @@ angular.module('landing', function () {})
                     s4() + '-' + s4() + s4() + s4();
             }
 
+        }])
+    .factory('userData', [
+        function () {
+            this.user = {};
+            this.user.setUser = function (u) {
+                this.user = u;
+            };
+            return this.user;
         }]);

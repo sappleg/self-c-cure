@@ -14,7 +14,7 @@
 }
 
 .header-contain label {
-    min-width:100%;
+    display:block;
 }
 
 .header-contain form {
@@ -39,4 +39,15 @@
 
 .body-contain p {
     font-size:15px;
+    display:inline-block;
+}
+
+.body-contain button {
+    margin-right:3%;
+}
+
+.body-contain li {
+    display:block;
+    margin-bottom:5%;
+    border-bottom: 1px solid #eeeeee;
 }

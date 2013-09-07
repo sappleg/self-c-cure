@@ -10,7 +10,7 @@
                         <label for="inputGuid">Add a device!</label>
                         <input type="text" class="form-control" id="inputGuid" placeholder="Use the given ID">
                         <input type="text" class="form-control" placeholder="Name the device">
-                        <button type="submit" class="btn btn-success btn-small pull-right"><i class="glyphicon glyphicon-plus"></i></button>
+                        <button type="submit" class="btn btn-success btn-small pull-right" ng-click="jumpDevice()"><i class="glyphicon glyphicon-plus"></i></button>
                     </div>
                     <hr/>
                 </form>
@@ -24,8 +24,9 @@
                 <ul class="list-unstyled">
                     <!--ng-class based on active/inactive-->
                     <li ng-repeat="device in devices">
-                        <p>{{device.name}}</p>
-                        <hr />
+                        <p ng-click="goToDevice($index)">{{device.name}}</p>
+                        <button class="btn btn-danger pull-right" ng-click="deactivateDevice($index)" ng-show="device.armed">DEACTIVATE</button>
+                        <button class="btn btn-success pull-right" ng-click="activateDevice($index)" ng-hide="device.armed">ACTIVATE</button>
                     </li>
                 </ul>
             </div>

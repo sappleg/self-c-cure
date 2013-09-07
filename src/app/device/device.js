@@ -17,9 +17,22 @@
 
 angular.module('device', function () {})
 
-    .controller('DeviceCtrl', ['$scope', function($scope) {
-        $scope.hello = "bitch"
+    .controller('DeviceCtrl', ['$scope', 'deviceData',
+        function($scope, deviceData) {
+            $scope.device = deviceData.device;
+            console.log($scope.device);
 
+            $scope.confDevice = {
 
+            }
+        }])
+    .factory('deviceData', [
+        function () {
 
-    }])
+            this.device = {};
+
+            this.device.setDevice = function (d) {
+                this.device = d;
+            };
+            return this.device;
+        }]);
