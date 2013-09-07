@@ -77,12 +77,12 @@ angular.module('login', function () {})
         $scope.createAcc = function () {
             killError();
 
-            if($scope.user.pass == $scope.meta.confirmPass && $scope.user.pass.length > 6) {
+            if($scope.user.password == $scope.meta.confirmPass && $scope.user.password.length > 6) {
 
                 var path = endpoint + '/auth/signup/',
                     body = JSON.stringify({
                         "email": $scope.user.email,
-                        "pass": $scope.user.pass
+                        "pass": $scope.user.password
                     });
                 $http.post(path, body).then(function(response) {
                     console.log(response);
@@ -96,12 +96,7 @@ angular.module('login', function () {})
                 }, function(response) {
                     console.log(response);
                 });
-            }
-            else if ($scope.user.pass.length > 6) {
-                $scope.meta.error = "Your password must be at least 6 characters."
-            }
-
-            else {
+            } else {
                 $scope.meta.error = "Your password and confirm password do not match.";
             }
         };
@@ -113,7 +108,7 @@ angular.module('login', function () {})
 
         var killUser = function () {
             $scope.user.email = '';
-            $scope.user.pass = '';
+            $scope.user.password = '';
             $scope.meta.confirmPassword = '';
         }
     }]);
