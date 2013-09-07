@@ -22,6 +22,9 @@ WiFlySerial WiFly(RX_PIN, TX_PIN);
 char requestBuffer[REQUEST_BUFFER_SIZE];
 char headerBuffer[HEADER_BUFFER_SIZE];
 char bodyBuffer[BODY_BUFFER_SIZE];
+int inputPin = 5;
+int previousState = 1;
+int currentState = 1;
 
 void freeRequestStrings(char* queryString, char* header, char* body) {
   free(queryString);
@@ -41,7 +44,7 @@ PString buildOpenRequest(char* requestPtr) {
 
 PString buildCloseRequest(char* requestPtr) {
   PString requestStr(requestPtr, REQUEST_BUFFER_SIZE);
-  requestStr << "GET " << deviceId << closeEndpoint
+  requestStr << "POST " << deviceId << closeEndpoint
     << " HTTP/1.1" << "\n"
     << "\n\n";
 }
@@ -74,7 +77,7 @@ int sendRequest(PString (*buildRequest)(char*)) {
   
   if (WiFly.openConnection(serverIp)) {
     Serial << "Connected to server at " << serverIp<< endl
-           << "Sending GET: " << request << endl;
+           << "Sending request: " << request << endl;
     
     WiFly << request;
     
@@ -105,6 +108,8 @@ int sendRequest(PString (*buildRequest)(char*)) {
 }
 
 void setup() {
+  pinMode(inputPin, INPUT);
+  
   // Begin processes
   Serial.begin(9600);
   Serial << "Beginning WiFly" << endl;
@@ -139,7 +144,16 @@ void setup() {
 }
 
 void loop() {
-  sendRequest(buildOpenRequest);
+  previousState = currentState;
+  currentState = digitalRead(inputPin);
+  
+  if (previousState == 1 && currentState == 0) {
+    // Door opened
+    sendRequest(buildOpenRequest);
+  } else if (previousState == 0 && currentState == 1) {
+    // Door closed
+    sendRequest(buildCloseRequest); 
+  }
   
   delay(5000);
 }
