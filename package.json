@@ -28,7 +28,8 @@
     "jshashes": "1.0.4",
     "nodemailer": "~0.5.2",
     "email-templates": "~0.1.0",
-    "q": "~0.9.7"
+    "q": "~0.9.7",
+    "base64": "~2.1.0"
   },
   "peerDependencies": {},
   "devDependencies": {

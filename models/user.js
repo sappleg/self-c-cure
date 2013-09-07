@@ -11,6 +11,7 @@
 var Schema = mongoose.Schema,
     validations = require('./validations.js'),
     salt = 'HuntersSaltyGrundle',
+    secret = 'self-c-cure',
     SHA2 = new (require('jshashes').SHA512)();
 
 function encodePassword(pass) {
@@ -20,6 +21,13 @@ function encodePassword(pass) {
 
     return SHA2.b64_hmac(pass, salt);
 }
+
+//function hashUserInfo(userId) {
+//    if (!userId) {
+//        return '';
+//    }
+//    return SHA2.b64_hmac(userId, secret);
+//}
 
 var UserSchema = new Schema({
     email: {
@@ -34,6 +42,10 @@ var UserSchema = new Schema({
         set: encodePassword,
         required: true
     }
+//    hash: {
+//        type: String,
+//        required: false
+//    }
 });
 
 UserSchema.statics.login = function(login, pass, cb) {
@@ -53,6 +65,26 @@ UserSchema.statics.getUser = function(userId, cb) {
             .find({ "_id": mongoose.Types.ObjectId(userId) }, cb);
     }
 }
+//
+//UserSchema.statics.getHash = function(userId, cb) {
+//    if (userId) {
+//        mongoose.models.User
+//            .where('userId', mongoose.Types.ObjectId(userId))
+//            .where('hash', hashUserInfo(userId))
+//            .findOne(cb);
+//    }
+//}
+//
+//UserSchema.statics.setHash = function(user, userId, cb) {
+//    if (user && userId) {
+//        mongoose.models.User
+//            .update({ '_id': mongoose.Types.ObjectId(userId) }, {
+//                password: user.get('password'),
+//                email: user.get('email'),
+//                hash: hashUserInfo(userId)
+//            }, cb);
+//    }
+//}
 
 UserSchema.path('email').validate(validations.uniqueFieldInsensitive('User', 'email'), 'unique');
 UserSchema.path('email').validate(validations.emailFormat, 'format');
