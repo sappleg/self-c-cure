@@ -27,7 +27,7 @@ app.configure(function() {
     app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.session({ secret: 'self-c-cure' }));
-//    app.use(auth.login);
+    app.use(auth.login);
     app.use(express.static(__dirname + '/src'));
     app.use(app.router);
 });

@@ -42,7 +42,9 @@ UserSchema.statics.login = function(login, pass, cb) {
 			.where('email', login)
 			.where('password', encodePassword(pass))
             .findOne(cb);
-	}
+	} else {
+        cb({ message: 'login and password are not defined' });
+    }
 }
 
 UserSchema.statics.getUser = function(userId, cb) {

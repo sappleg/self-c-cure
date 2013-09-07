@@ -37,13 +37,13 @@ exports.signup = function(req, res) {
 };
 
 exports.login = function(req, res, next) {
-	if (!req.body) {
-	    return res.send(404);
-	}
+//	if (!req.body) {
+//	    return res.send(404);
+//	}
 	
 	app.models.User.login(req.body.email, req.body.pass, function(err, user) {
 		if (err) { // validation failed
-            res.send(err);
+            res.send(400, err);
 		} else {
 			if (user) { // login
 				req.session.user = {
