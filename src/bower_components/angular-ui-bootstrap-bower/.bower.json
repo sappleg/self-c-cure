@@ -1,0 +1,17 @@
+{
+  "author": {
+    "name": "https://github.com/angular-ui/bootstrap/graphs/contributors"
+  },
+  "name": "angular-bootstrap",
+  "version": "0.2.0",
+  "homepage": "https://github.com/angular-ui/bootstrap-bower",
+  "_release": "0.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.2.0",
+    "commit": "1707cbee29f0c84d2e40670b3ea1797ef703871d"
+  },
+  "_source": "git://github.com/angular-ui/bootstrap-bower.git",
+  "_target": "~0.2.0",
+  "_originalSource": "angular-ui-bootstrap-bower"
+}
