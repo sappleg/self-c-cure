@@ -9,8 +9,8 @@
 
 
 angular.module('login', function () {})
-    .controller('LoginCtrl', ['$scope', '$location', '$http', 'userData',
-        function($scope, $location, $http, userData) {
+    .controller('LoginCtrl', ['$scope', '$location', '$http', 'userData', 'endpoint'
+        function($scope, $location, $http, userData, endpoint) {
         $scope.swag = {
             createAccTxt: "Create Account",
             createAccBtn: "default"
@@ -28,7 +28,7 @@ angular.module('login', function () {})
             console.log('here');
             killError();
 
-            var path = 'http://localhost:8142/auth/login/',
+            var path = endpoint + '/auth/login/',
                 body = JSON.stringify({
                     "email": $scope.user.email,
                     "pass": $scope.user.pass
@@ -38,7 +38,7 @@ angular.module('login', function () {})
                     $scope.user.email = '';
                     $scope.user.pass = '';
                     //GET devices
-                    var start = 'http://localhost:8142/user/';
+                    var start = endpoint + '/user/';
                     var id = response.data.id;
                     var path = start.concat(id);
 
@@ -80,7 +80,7 @@ angular.module('login', function () {})
 
             if($scope.user.pass == $scope.meta.confirmPass && $scope.user.pass.length > 6) {
 
-                var path = 'http://localhost:8142/auth/signup/',
+                var path = endpoint + '/auth/signup/',
                     body = JSON.stringify({
                         "email": $scope.user.email,
                         "pass": $scope.user.pass

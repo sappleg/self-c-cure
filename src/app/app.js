@@ -41,5 +41,6 @@ app.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpPro
         $routeProvider.otherwise({redirectTo: '/'});
         $httpProvider.responseInterceptors.push('Authentication');
     }])
-    .value('_api', 'http://localhost:8142/');
+    //.value('endpoint', 'http://localhost:8142/');
+    .value('endpoint', 'http://self-c-cure.thotpod.com');
 

@@ -17,8 +17,8 @@
 
 angular.module('device', function () {})
 
-    .controller('DeviceCtrl', ['$scope', '$http', '$location', 'deviceData', 'userData',
-        function($scope, $http, $location, deviceData, userData) {
+    .controller('DeviceCtrl', ['$scope', '$http', '$location', 'deviceData', 'userData', 'endpoint'
+        function($scope, $http, $location, deviceData, userData, endpoint) {
 
             $scope.meta = {
                 editName: false,
@@ -50,7 +50,7 @@ angular.module('device', function () {})
             $scope.activateDevice = function () {
                 $scope.device.armed = true;
 
-                var start = 'http://localhost:8142/user/',
+                var start = endpoint + '/user/',
                     userID = $scope.device.userId,
                     device = '/devices/',
                     deviceID = $scope.device._id;
@@ -69,7 +69,7 @@ angular.module('device', function () {})
             $scope.deactivateDevice = function () {
                 $scope.device.armed = false;
 
-                var start = 'http://localhost:8142/user/',
+                var start = endpoint + '/user/',
                     userID = $scope.device.userId,
                     device = '/devices/',
                     deviceID = $scope.device._id;
@@ -87,7 +87,7 @@ angular.module('device', function () {})
 
 
             $scope.updateDevice = function () {
-                var start = 'http://localhost:8142/user/',
+                var start = path + '/user/',
                     userID = $scope.device.userId,
                     device = '/devices/',
                     deviceID = $scope.device._id;
@@ -112,7 +112,7 @@ angular.module('device', function () {})
             };
 
             $scope.createDevice = function () {
-                var start = 'http://localhost:8142/user/',
+                var start = endpoint + '/user/',
                     userID = $scope.device.userId,
                     device = '/devices/';
                 var path = start.concat(userID).concat(device);
@@ -137,7 +137,7 @@ angular.module('device', function () {})
             };
 
             $scope.deleteDevice = function () {
-                var start = 'http://localhost:8142/user/',
+                var start = endpoint + '/user/',
                     userID = $scope.device.userId,
                     device = '/devices/',
                     deviceID = $scope.device._id;
@@ -161,7 +161,7 @@ angular.module('device', function () {})
             }
 
             $scope.back = function () {
-                var start = 'http://localhost:8142/user/',
+                var start = endpoint + '/user/',
                     userID = $scope.device.userId;
                 var path = start.concat(userID);
                 $http.get(path).then(function(response) {
@@ -175,7 +175,7 @@ angular.module('device', function () {})
             };
 
             $scope.cancel = function () {
-                var start = 'http://localhost:8142/user/',
+                var start = endpoint + '/user/',
                     userID = $scope.device.userId;
                 var path = start.concat(userID);
                 $http.get(path).then(function(response) {

@@ -8,8 +8,8 @@
 
 
 angular.module('landing', function () {})
-    .controller('LandingCtrl', ['$scope', '$location', '$http', 'dummyData', 'userData', 'deviceData',
-        function($scope, $location, $http, dummyData, userData, deviceData) {
+    .controller('LandingCtrl', ['$scope', '$location', '$http', 'dummyData', 'userData', 'deviceData', 'endpoint'
+        function($scope, $location, $http, dummyData, userData, deviceData, endpoint) {
             $scope.userData = userData;
             console.log($scope.userData);
             $scope.meta = {
@@ -57,7 +57,7 @@ angular.module('landing', function () {})
             $scope.activateDevice = function ($index) {
                 $scope.userData.devices[$index].armed = true;
 
-                var start = 'http://localhost:8142/user/',
+                var start = endpoint + '/user/',
                     userID = $scope.user.user._id,
                     device = '/devices/',
                     deviceID = $scope.userData.devices[$index]._id;
@@ -82,7 +82,7 @@ angular.module('landing', function () {})
             $scope.deactivateDevice = function ($index) {
                 $scope.userData.devices[$index].armed = false;
 
-                var start = 'http://localhost:8142/user/',
+                var start = endpoint + '/user/',
                     userID = $scope.user.user._id,
                     device = '/devices/',
                     deviceID = $scope.userData.devices[$index]._id;
