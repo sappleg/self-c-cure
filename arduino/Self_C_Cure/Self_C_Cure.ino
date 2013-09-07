@@ -108,8 +108,11 @@ int sendRequest(PString (*buildRequest)(char*)) {
 }
 
 void setup() {
+<<<<<<< HEAD
   pinMode(inputPin, INPUT);
   
+=======
+>>>>>>> origin/cm/circuit
   // Begin processes
   Serial.begin(9600);
   Serial << "Beginning WiFly" << endl;
@@ -144,6 +147,7 @@ void setup() {
 }
 
 void loop() {
+<<<<<<< HEAD
   previousState = currentState;
   currentState = digitalRead(inputPin);
   
@@ -154,6 +158,9 @@ void loop() {
     // Door closed
     sendRequest(buildCloseRequest); 
   }
+=======
+  sendRequest(buildOpenRequest);
+>>>>>>> origin/cm/circuit
   
   delay(5000);
 }
