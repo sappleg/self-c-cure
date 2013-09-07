@@ -78,18 +78,29 @@ void loop() {
   
   // Always null check after mallocs in case of heap overflow
   if (queryString == NULL || header == NULL || body == NULL) {
-    Serial << "Heap Overflow Error";
+    Serial << "Heap Overflow Error" << endl;
     freeRequestStrings(queryString, header, body);
     
     // Halt execution
     while (1) {}
   }
   
-  // Using PString library for easy writes into memory
+  // Using PString library for easy reads/writes from/into memory
   PString queryStr(queryString, QUERY_STRING_BUFFER_SIZE);
   PString headerStr(header, HEADER_BUFFER_SIZE);
   PString bodyStr(body, BODY_BUFFER_SIZE);
   
+  // Load request strings into memory
+  queryStr << baseEndpoint << deviceId << openEndpoint;
+  
+  Serial << "Attempting to connect to server at " << queryStr << endl;
+  if (WiFly.openConnection(queryStr)) {
+    Serial << "Connected to server at " << queryString << endl;
+    
+    WiFly.closeConnection();
+  } else {
+    Serial << "Failed to connect to server at " << queryString << endl;
+  }
   
   
   // Free allocated memory
