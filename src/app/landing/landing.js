@@ -8,20 +8,111 @@
 
 
 angular.module('landing', function () {})
-
-    .controller('LandingCtrl', ['$scope', '$location', 'dummyData',
-        function($scope, $location, dummyData) {
-            $scope.user = {
-                email: "hunter@gmail.com",
-                id: ""
-            }
-            $scope.devices = dummyData.genDummyData(20);
+    .controller('LandingCtrl', ['$scope', '$location', '$http', 'dummyData', 'userData', 'deviceData',
+        function($scope, $location, $http, dummyData, userData, deviceData) {
+            $scope.userData = userData;
+            console.log($scope.userData);
+            $scope.meta = {
+                id: '',
+                name: '',
+                error:''
+            };
 
             $scope.logout = function () {
                 //logout user
                 $location.path('/');
-            }
+            };
 
+            $scope.jumpDevice = function () {
+                if($scope.meta.id.length == 24 && $scope.meta.name.length>0) {
+
+                    //prep json for jump
+                    var device = {
+                        name: $scope.meta.name,
+                        userId: $scope.user.user._id,
+                        deviceId: $scope.meta.id,
+                        limit: null,
+                        ranges: [],
+                        armed: false
+                    };
+
+                    console.log(device);
+                    deviceData.setDeviceData(device);
+                    $location.path('/device');
+                }
+                else if($scope.meta.name = '') {
+                    $scope.meta.error = 'Give your device a name';
+                }
+                else if($scope.meta.id.length != 24 ) {
+                    $scope.meta.error = 'Invalid ID length';
+                }
+            };
+
+            $scope.goToDevice = function ($index) {
+                console.log($scope.userData.devices[$index]);
+                deviceData.setDeviceData($scope.userData.devices[$index]);
+                $location.path('/device');
+            };
+
+            $scope.activateDevice = function ($index) {
+                $scope.userData.devices[$index].armed = true;
+
+                var start = 'http://localhost:8142/user/',
+                    userID = $scope.user.user._id,
+                    device = '/devices/',
+                    deviceID = $scope.userData.devices[$index]._id;
+                var path = start.concat(userID).concat(device).concat(deviceID);
+                var body = cleanData($scope.userData.devices[$index]);
+
+
+                $http.put(path, body).then(function(response) {
+                    console.log(response);
+                    var path = start.concat(userID);
+                    $http.get(path).then(function(response) {
+                        userData.setUserData(response.data);
+                        $location.path('/landing');
+                    }, function(response) {
+
+                    });
+                }, function(response) {
+                    console.log(response);
+                });
+            };
+
+            $scope.deactivateDevice = function ($index) {
+                $scope.userData.devices[$index].armed = false;
+
+                var start = 'http://localhost:8142/user/',
+                    userID = $scope.user.user._id,
+                    device = '/devices/',
+                    deviceID = $scope.userData.devices[$index]._id;
+                var path = start.concat(userID).concat(device).concat(deviceID);
+                var body = cleanData($scope.userData.devices[$index]);
+
+
+                $http.put(path, body).then(function(response) {
+                    console.log(response);
+                    console.log('alpha as fuck!!');
+
+                    var path = start.concat(userID);
+                    $http.get(path).then(function(response) {
+                        userData.setUserData(response.data);
+                        $location.path('/landing');
+                    }, function(response) {
+
+                    });
+                }, function(response) {
+                    console.log(response);
+                });
+            };
+
+            var cleanData = function (dirtyD) {
+                var copy = {};
+                copy = angular.copy(dirtyD, copy);
+                delete copy['$$hashKey'];
+                delete copy['_id'];
+                return copy;
+            }
     }])
     .service('dummyData', [
         function () {
@@ -71,4 +162,13 @@ angular.module('landing', function () {})
                     s4() + '-' + s4() + s4() + s4();
             }
 
+        }])
+    .service('userData', [
+        function () {
+            this.setUserData = function (u) {
+                this.user = u.user[0];
+                this.devices = u.devices;
+            };
+
+            return this;
         }]);

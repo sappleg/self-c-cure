@@ -11,6 +11,9 @@
 
 .header-contain p {
     font-size:20px;
+}
+
+.header-contain label {
     display:block;
 }
 
@@ -29,11 +32,34 @@
 /*body*/
 .body-contain {
     background-color: rgb(245, 245, 245);
-    padding-left: 3%;
     overflow-y:scroll;
     max-height: 600px;
+    border-left: 1px solid #eeeeee;
+    border-right: 1px solid #eeeeee;
 }
 
 .body-contain p {
-    font-size:15px;
+    font-size:20px;
+    display:inline-block;
+    margin-left:6%;
+}
+
+.body-contain p:hover {
+    cursor:pointer;
+}
+
+.body-contain button {
+    margin-right:3%;
+    width:25%;
+    font-size:12px;
+}
+
+.body-contain ul {
+    margin-bottom:0;
+}
+
+.body-contain li {
+    margin-top:20px;
+    border-bottom: 1px solid #eeeeee;
+    min-height: 50px;
 }

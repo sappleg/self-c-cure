@@ -1,0 +1,63 @@
+/*header*/
+.device-contain {
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    margin: 6% 0 0;
+}
+
+.device-contain input {
+    width:30%;
+}
+
+
+.device-contain p {
+    display:inline-block;
+    font-size:20px;
+}
+
+.device-contain .header-button {
+    display:block;
+}
+
+.device-contain button {
+    margin-right:1%;
+}
+
+
+/*body*/
+
+
+.device-body-contain p {
+    display:inline-block;
+    margin-left:3%;
+}
+
+.device-body-contain .form-group input {
+    display:inline-block;
+    width:15%;
+}
+
+.device-body-contain .form-group-button {
+    margin-right:3%;
+    width:30%;
+}
+
+.device-body-contain .form-buttons button {
+    margin: 25px 3% 0 3%;
+    width: 30%;
+}
+
+.device-body-contain ul {
+    margin-top:15px;
+}
+
+.device-body-contain .range-well {
+    margin:0 3% 0;
+}
+
+.device-body-contain .input-button-group {
+    display:block;
+}
