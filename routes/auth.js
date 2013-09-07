@@ -89,3 +89,7 @@ exports.login = function(req, res, next) {
         }
     }
 };
+
+exports.logout = function(res, req) {
+    res.clearCookie(cookieName);
+};

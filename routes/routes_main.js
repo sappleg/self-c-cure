@@ -25,3 +25,4 @@ app.post('/user/:userId?/devices/', device.register);
 
 /* Authentication */
 app.post('/auth/signup/', auth.signup);
+app.post('/auth/logout/', auth.logout);
