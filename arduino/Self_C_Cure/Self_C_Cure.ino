@@ -3,20 +3,32 @@
 #include <Streaming.h>
 #include <SoftwareSerial.h>
 #include <WiFlySerial.h>
+#include <PString.h>
 #include "Credentials.h"
 
 // Precompiler definitions
 #define RX_PIN 2
 #define TX_PIN 3
 #define REQUEST_BUFFER_SIZE 80
+#define QUERY_STRING_BUFFER_SIZE 100
 #define HEADER_BUFFER_SIZE 120
 #define BODY_BUFFER_SIZE 180
 
 // Statics
 WiFlySerial WiFly(RX_PIN, TX_PIN);
 char requestBuffer[REQUEST_BUFFER_SIZE];
+char queryStringBuffer[QUERY_STRING_BUFFER_SIZE];
 char headerBuffer[HEADER_BUFFER_SIZE];
 char bodyBuffer[BODY_BUFFER_SIZE];
+
+void freeRequestStrings(char* queryString, char* header, char* body) {
+  free(queryString);
+  free(header);
+  free(body);
+  queryString = NULL;
+  header = NULL;
+  body = NULL;  
+}
 
 // Arduino setup
 void setup() {
@@ -45,21 +57,23 @@ void setup() {
 }
 
 void loop() {
+  char* queryString = (char*) malloc(QUERY_STRING_BUFFER_SIZE);
   char* header = (char*) malloc(HEADER_BUFFER_SIZE);
   char* body = (char*) malloc(BODY_BUFFER_SIZE);
   
-  if (header == NULL || body == NULL) {
+  if (queryString == NULL || header == NULL || body == NULL) {
     Serial << "Heap Overflow Error";
-    return;
+    freeRequestStrings(queryString, header, body);
+    
+    // halt execution
+    while (1) {}
   }
   
+  PString queryStr(queryString, QUERY_STRING_BUFFER_SIZE);
   PString headerStr(header, HEADER_BUFFER_SIZE);
   PString bodyStr(body, BODY_BUFFER_SIZE);
   
-  free(header)
-  free(body)
-  header = NULL;
-  body = NULL;
+  freeRequestStrings(queryString, header, body);
   
   delay(5000);
 }
