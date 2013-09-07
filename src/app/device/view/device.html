@@ -1,9 +1,12 @@
-<div ng-controller="LandingCtrl">
+<div ng-controller="DeviceCtrl">
     <div class="row">
         <!--response col stuff here??-->
         <div class="col-lg-offset-3 col-lg-6">
-            <div class="landing-contain">
-                <h1>{{device.name}}</h1>
+            <div class="device-contain">
+                <button class="btn btn-default pull-left header-button" ng-click="back()"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                <button class="btn btn-default pull-right" ng-click="meta.editName = !meta.editName"><i class="glyphicon glyphicon-edit"></i></button>
+                <p ng-hide="meta.editName">{{device.name}}</p>
+                <input type="text" class="form-control" ng-show="meta.editName" placeholder="{{device.name}}" ng-model="device.name">
                 <hr />
 
 
@@ -13,8 +16,37 @@
     <div class="row">
         <!--response col stuff here??-->
         <div class="col-lg-offset-3 col-lg-6">
-            <div class="landing-body-contain">
+            <div class="device-body-contain">
 
+                <div ng-hide="device.$$hashKey == undefined">
+                    <button class="btn btn-danger btn-explode" ng-click="deactivateDevice()" ng-show="device.armed">DEACTIVATE</button>
+                    <button class="btn btn-success btn-explode" ng-click="activateDevice()" ng-hide="device.armed">ACTIVATE</button>
+                </div>
+                <div class="form-group">
+                    <p>Threshold:  </p>
+                    <input type="text" class="form-control" placeholder="In seconds." ng-model="device.limit">
+                </div>
+                <span class="form-group">
+                    <p>Start Time: </p>
+                    <input type="number" class="form-control" placeholder="XXXX" ng-model="meta.lower">
+                </span>
+                <span class="form-group">
+                    <p class="end-time">End Time: </p>
+                    <input type="text" class="form-control" placeholder="XXXX" ng-model="meta.upper">
+                </span>
+                <span class="form-group-button pull-right">
+                    <button class="btn btn-success">Add a new interval <i class="glyphicon glyphicon-plus"></i></button>
+                </span>
+
+                <div class="form-buttons" ng-show="device.$$hashKey == undefined">
+                    <button class="btn btn-success" ng-click="submit()">Confirm</button>
+                    <button class="btn btn-danger pull-right" ng-click="cancel()">Cancel</button>
+                </div>
+
+                <div class="form-buttons" ng-show="device.$$hashKey != undefined">
+                    <button class="btn btn-success" ng-click="submit()">Update</button>
+                    <button class="btn btn-danger pull-right" ng-click="cancel()">Cancel</button>
+                </div>
             </div>
         </div>
     </div>

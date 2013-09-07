@@ -8,7 +8,6 @@
 
 
 angular.module('landing', function () {})
-
     .controller('LandingCtrl', ['$scope', '$location', '$http', 'dummyData', 'userData', 'deviceData',
         function($scope, $location, $http, dummyData, userData, deviceData) {
             $scope.user = userData.user.user[0];
@@ -19,7 +18,8 @@ angular.module('landing', function () {})
 
             $scope.meta = {
                 id: '',
-                name: ''
+                name: '',
+                error:''
             };
 
             $scope.logout = function () {
@@ -28,10 +28,31 @@ angular.module('landing', function () {})
             };
 
             $scope.jumpDevice = function () {
+                if($scope.meta.id.length == 24 && $scope.meta.name.length>0) {
 
-                // ensure meta data is valid here before JUMP
+                    //prep json for jump
+                    var device = {
+                        name: $scope.meta.name,
+                        userId: $scope.user._id,
+                        _id: $scope.meta.id,
+                        limit: null,
+                        ranges: [{
+                            lower: null,
+                            upper: null
+                        }],
+                        armed: false
+                    };
 
-
+                    console.log(device);
+                    deviceData.setDevice(device);
+                    $location.path('/device');
+                }
+                else if($scope.meta.name = '') {
+                    $scope.meta.error = 'Give your device a name';
+                }
+                else if($scope.meta.id.length != 24 ) {
+                    $scope.meta.error = 'Invalid ID length';
+                }
             };
 
             $scope.goToDevice = function ($index) {
@@ -46,9 +67,8 @@ angular.module('landing', function () {})
                 var start = 'http://localhost:8142/user/',
                     userID = $scope.user._id,
                     device = '/devices/',
-                    deviceID = $scope.devices[$index]._id,
-                    trail = '/';
-                var path = start.concat(userID).concat(device).concat(deviceID).concat(trail);
+                    deviceID = $scope.devices[$index]._id;
+                var path = start.concat(userID).concat(device).concat(deviceID);
                 var body = $scope.devices[$index];
 
 
@@ -66,9 +86,8 @@ angular.module('landing', function () {})
                 var start = 'http://localhost:8142/user/',
                     userID = $scope.user._id,
                     device = '/devices/',
-                    deviceID = $scope.devices[$index]._id,
-                    trail = '/';
-                var path = start.concat(userID).concat(device).concat(deviceID).concat(trail);
+                    deviceID = $scope.devices[$index]._id;
+                var path = start.concat(userID).concat(device).concat(deviceID);
                 var body = $scope.devices[$index];
 
 
@@ -79,8 +98,7 @@ angular.module('landing', function () {})
                     console.log(response);
                 });
             };
-
-        }])
+    }])
     .service('dummyData', [
         function () {
 
