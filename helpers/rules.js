@@ -7,3 +7,17 @@
  */
 
 'use strict';
+
+exports.startTimer = function(limit) {
+    var counter = 0;
+    setInterval(function() {
+        if (counter >= limit) {
+            return;
+        }
+        counter += 1;
+    }, 1000);
+}
+
+exports.stopTimer = function() {
+
+}

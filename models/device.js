@@ -17,6 +17,13 @@ DeviceSchema.statics.getDevices = function(userId, cb) {
     }
 }
 
+DeviceSchema.statics.getDevice = function(deviceId, cb) {
+    if (deviceId) {
+        mongoose.models.Device
+            .find({ "deviceId": deviceId }, cb);
+    }
+}
+
 DeviceSchema.statics.updateDevice = function(deviceId, deviceData, cb) {
     if (deviceId && deviceData) {
         mongoose.models.Device
