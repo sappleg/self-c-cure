@@ -82,8 +82,9 @@ int sendRequest(PString (*buildRequest)(char*)) {
            << "Sending request: " << request << endl;
     WiFly << request;
     
-    while (WiFly.isConnectionOpen()) {
-      WiFly.read();
+    long began = millis();
+    while (millis() - began < 4000) {
+      Serial << WiFly.read();
     } 
     
     WiFly.closeConnection();
@@ -138,6 +139,7 @@ void setup() {
     while (1) {}
   }
   
+  // Wait for local IP to be assigned by access point
   Serial << "Waiting for network configuration..." << endl;
   delay (3000);
   
@@ -158,7 +160,7 @@ void loop() {
   } else if (previousState == 0 && currentState == 1) {
     // Door closed
     int count = 0;
-    while(!sendRequest(buildOpenRequest) && count < 3) {
+    while(!sendRequest(buildCloseRequest) && count < 3) {
       count++;
     }
   }
