@@ -9,7 +9,6 @@
 'use strict';
 
 var path = require('path'),
-    mailer = require('../helpers/mailer.js'),
     rules = require('../helpers/rules.js');
 
 exports.retrieve = function(req, res) {
@@ -105,9 +104,9 @@ exports.open = function(req, res) {
 }
 
 exports.closed = function(req, res) {
-    app.models.Device.getDevice(req.param('deviceId'), function(err, deviceData) {
+    app.models.Device.getDevice(req.param('deviceId'), function(err, device) {
         if (device[0].armed) {
-            if (deviceData[0].limit) {
+            if (device[0].limit) {
                 rules.stopTimer(req.param('deviceId'));
                 res.send(200);
             } else {

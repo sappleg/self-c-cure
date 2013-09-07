@@ -1,14 +1,22 @@
-var Schema = mongoose.Schema;
-//    ObjectId = Schema.ObjectId;
+/**
+ * Created with JetBrains WebStorm.
+ * User: spencer
+ * Date: 9/5/13
+ * Time: 10:10 PM
+ * To change this template use File | Settings | File Templates.
+ */
 
-var DeviceSchema = new Schema({
-    name: String,
-    userId: Schema.Types.ObjectId,
-    deviceId: String,
-    limit: Number,
-    ranges: [],
-    armed: Boolean
-});
+'use strict';
+
+var Schema = mongoose.Schema,
+    DeviceSchema = new Schema({
+        name: String,
+        userId: Schema.Types.ObjectId,
+        deviceId: String,
+        limit: Number,
+        ranges: [],
+        armed: Boolean
+    });
 
 DeviceSchema.statics.getDevices = function(userId, cb) {
     if (userId) {

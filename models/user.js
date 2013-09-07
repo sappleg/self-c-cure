@@ -1,11 +1,20 @@
+/**
+ * Created with JetBrains WebStorm.
+ * User: spencer
+ * Date: 9/5/13
+ * Time: 10:10 PM
+ * To change this template use File | Settings | File Templates.
+ */
+
+'use strict';
+
 var Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId,
-    Validations = require('./validations.js'),
-    salt = 'mySaltyString',
+    validations = require('./validations.js'),
+    salt = 'HuntersSaltyGrundle',
     SHA2 = new (require('jshashes').SHA512)();
 
 function encodePassword(pass) {
-	if (typeof pass === 'string' && pass.length < 6) {
+    if (typeof pass === 'string' && pass.length < 6) {
         return '';
     }
 
@@ -33,31 +42,18 @@ UserSchema.statics.login = function(login, pass, cb) {
 			.where('email', login)
 			.where('password', encodePassword(pass))
             .findOne(cb);
-	} else {
-		// just to launch the standard error
-		var o = new this({password: '', email: login+'aaa'});
-		o.save(cb);
 	}
 }
 
 UserSchema.statics.getUser = function(userId, cb) {
     if (userId) {
         mongoose.models.User
-            .find({ "_id": mongoose.mongo.BSONPure.ObjectID.fromString(userId) }, cb);
+            .find({ "_id": mongoose.Types.ObjectId(userId) }, cb);
     }
 }
 
-UserSchema.path('email').validate(
-    Validations.uniqueFieldInsensitive('User', 'email'),
-    'unique'
-);
-UserSchema.path('email').validate(
-    Validations.emailFormat,
-    'format'
-);
-UserSchema.path('password').validate(
-    Validations.cannotBeEmpty,
-    'password'
-);
-UserSchema.plugin(mongoose.availablePlugins.timestamper);
+UserSchema.path('email').validate(validations.uniqueFieldInsensitive('User', 'email'), 'unique');
+UserSchema.path('email').validate(validations.emailFormat, 'format');
+UserSchema.path('password').validate(validations.cannotBeEmpty, 'password');
+
 mongoose.model('User', UserSchema);

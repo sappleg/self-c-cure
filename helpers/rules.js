@@ -51,28 +51,28 @@ exports.stopTimer = function(deviceId) {
 }
 
 exports.checkRange = function(device) {
-    var hours = new Date().getHours();
-    var minutes = new Date().getMinutes();
-    var now = new Date(0, 0, 0, hours, minutes, 0);
-    for (var i = 0; i < device.ranges.length; i++) {
-        var lower = device.ranges[i].lower.split('');
-        var upper = device.ranges[i].upper.split('');
+    var hours = new Date().getHours(),
+        minutes = new Date().getMinutes(),
+        now = new Date(0, 0, 0, hours, minutes, 0);
 
-        var lowerHour = lower[0] + lower[1];
-        var lowerMin = lower[2] + lower[3];
-        var upperHour = upper[0] + upper[1];
-        var upperMin = upper[2] + upper[3];
-        var lowerTime = new Date(0, 0, 0, lowerHour, lowerMin, 0);
-        var upperTime = new Date(0, 0, 0, upperHour, upperMin, 0);
+    for (var i = 0; i < device.ranges.length; i++) {
+        var lower = device.ranges[i].lower.split(''),
+            upper = device.ranges[i].upper.split(''),
+            lowerHour = lower[0] + lower[1],
+            lowerMin = lower[2] + lower[3],
+            upperHour = upper[0] + upper[1],
+            upperMin = upper[2] + upper[3],
+            lowerTime = new Date(0, 0, 0, lowerHour, lowerMin, 0),
+            upperTime = new Date(0, 0, 0, upperHour, upperMin, 0);
 
         if (now >= lowerTime && now <= upperTime) {
             var locals = {
-                lower: transformTime(lowerHour, lowerMin),
-                upper: transformTime(upperHour, upperMin),
-                name: device.name,
-                type: 'intrusion'
-            };
-            var emailDeferred = Q.defer();
+                    lower: transformTime(lowerHour, lowerMin),
+                    upper: transformTime(upperHour, upperMin),
+                    name: device.name,
+                    type: 'intrusion'
+                },
+                emailDeferred = Q.defer();
 
             app.models.User.getUser(device.userId.toString(), function(err, user) {
                 if (!err) {
@@ -101,13 +101,9 @@ function transformTime(hour, min) {
     var half = 'am';
     if (hour >= 12) {
         half = 'pm';
-    }
-
-    if (hour > 12) {
+    } else if (hour > 12) {
         hour =- 12;
-    }
-
-    if (hour == 0) {
+    } else if (hour == 0) {
         hour = '12';
     }
 
