@@ -10,7 +10,7 @@
 
 var app = angular.module('app', ['login', 'landing', 'device']);
 
-app.factory('Authentication', ['$location', '$q', function($location, $q) {
+app.factory('Authentication', ['$location', function($location) {
     return function (promise) {
         console.log('called', promise);
         return promise.then(
@@ -41,6 +41,5 @@ app.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpPro
         $routeProvider.otherwise({redirectTo: '/'});
         $httpProvider.responseInterceptors.push('Authentication');
     }])
-    //.value('endpoint', 'http://localhost:8142/');
-    .value('endpoint', 'http://self-c-cure.thotpod.com');
+    .value('endpoint', 'http://self-c-cure.thotpod.com:8142');
 

@@ -25,7 +25,6 @@ angular.module('login', function () {})
         };
 
         $scope.login = function () {
-            console.log('here');
             killError();
 
             var path = endpoint + '/auth/login/',
