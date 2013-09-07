@@ -15,6 +15,7 @@ user: {
 device: {
     name: String,
     userId: ObjectId,
+    deviceId: String,
     limit: Number,
     ranges: [{
         start: Number (####),
