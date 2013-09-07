@@ -12,7 +12,6 @@ var app = angular.module('app', ['login', 'landing', 'device']);
 
 app.factory('Authentication', ['$location', function($location) {
     return function (promise) {
-        console.log('called', promise);
         return promise.then(
             function(response) {
                 return response;
