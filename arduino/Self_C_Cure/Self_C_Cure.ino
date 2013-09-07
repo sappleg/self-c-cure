@@ -22,6 +22,9 @@ WiFlySerial WiFly(RX_PIN, TX_PIN);
 char requestBuffer[REQUEST_BUFFER_SIZE];
 char headerBuffer[HEADER_BUFFER_SIZE];
 char bodyBuffer[BODY_BUFFER_SIZE];
+int inputPin = 5;
+int previousState = 1;
+int currentState = 1;
 
 void freeRequestStrings(char* queryString, char* header, char* body) {
   free(queryString);
@@ -34,19 +37,81 @@ void freeRequestStrings(char* queryString, char* header, char* body) {
 
 PString buildOpenRequest(char* requestPtr) {
   PString requestStr(requestPtr, REQUEST_BUFFER_SIZE);
-  requestStr << "GET " << deviceId << openEndpoint
+  requestStr << "POST " << deviceId << openEndpoint
     << " HTTP/1.1" << "\n"
     << "\n\n";
 }
 
 PString buildCloseRequest(char* requestPtr) {
   PString requestStr(requestPtr, REQUEST_BUFFER_SIZE);
-  requestStr << "GET " << deviceId << closeEndpoint
+  requestStr << "POST " << deviceId << closeEndpoint
     << " HTTP/1.1" << "\n"
     << "\n\n";
 }
 
+int sendRequest(PString (*buildRequest)(char*)) {
+  Serial << "Sending Request" << endl;
+  
+   #if DEBUG_ON
+  int freeMemoryStart = freeMemory();
+  #endif
+  
+  // Allocate memory for request strings
+  char* request = (char*) malloc(REQUEST_BUFFER_SIZE);
+  char* header = (char*) malloc(HEADER_BUFFER_SIZE);
+  char* body = (char*) malloc(BODY_BUFFER_SIZE);
+  
+  // Always null check after mallocs in case of heap overflow
+  if (request == NULL || header == NULL || body == NULL) {
+    Serial << "Heap Overflow Error" << endl;
+    freeRequestStrings(request, header, body);
+    
+    // Return 0 to express failed request
+    return 0;
+  }
+  
+  // Load request strings into memory
+  buildRequest(request);
+  
+  Serial << "Attempting to connect to server at " << serverIp << endl;
+  
+  WiFly.setRemotePort(serverPort);
+  
+  if (WiFly.openConnection(serverIp)) {
+    Serial << "Connected to server at " << serverIp<< endl
+           << "Sending request: " << request << endl;
+    WiFly << request;
+    
+    long began = millis();
+    while (millis() - began < 4000) {
+      Serial << WiFly.read();
+    } 
+    
+    WiFly.closeConnection();
+  } else {
+    Serial << "Failed to connect to server at " << serverIp << endl;
+  }
+  
+  
+  // Free allocated memory
+  freeRequestStrings(request, header, body);
+  
+  #if DEBUG_ON
+  int freeMemoryFinish = freeMemory();
+  if (freeMemoryStart != freeMemoryFinish) {
+    Serial << "Memory leak detected:" << endl
+           << "Free memory before:" << freeMemoryStart << endl
+           << "Free memory after:" << freeMemoryFinish << endl;
+  }
+  #endif 
+  
+  // Return 1 to express successful request
+  return 1;
+}
+
 void setup() {
+  pinMode(inputPin, INPUT);
+  
   // Begin processes
   Serial.begin(9600);
   Serial << "Beginning WiFly" << endl;
@@ -74,6 +139,7 @@ void setup() {
     while (1) {}
   }
   
+  // Wait for local IP to be assigned by access point
   Serial << "Waiting for network configuration..." << endl;
   delay (3000);
   
@@ -81,58 +147,23 @@ void setup() {
 }
 
 void loop() {
-  #if DEBUG_ON
-  int freeMemoryStart = freeMemory();
-  #endif
+  previousState = currentState;
+  currentState = digitalRead(inputPin);
   
-  // Allocate memory for request strings
-  char* request = (char*) malloc(REQUEST_BUFFER_SIZE);
-  char* header = (char*) malloc(HEADER_BUFFER_SIZE);
-  char* body = (char*) malloc(BODY_BUFFER_SIZE);
-  
-  // Always null check after mallocs in case of heap overflow
-  if (request == NULL || header == NULL || body == NULL) {
-    Serial << "Heap Overflow Error" << endl;
-    freeRequestStrings(request, header, body);
-    
-    // Halt execution
-    while (1) {}
-  }
-  
-  // Load request strings into memory
-  buildOpenRequest(request);
-  
-  Serial << "Attempting to connect to server at " << serverIp << endl;
-  
-  WiFly.setRemotePort(serverPort);
-  
-  if (WiFly.openConnection(serverIp)) {
-    Serial << "Connected to server at " << serverIp<< endl
-           << "Sending GET: " << request << endl;
-    
-    WiFly << request;
-    
-    while (WiFly.isConnectionOpen()) {
-      Serial << WiFly.read();
+  // Try each request up to 3 times upon failure
+  if (previousState == 1 && currentState == 0) {
+    // Door opened
+    int count = 0;
+    while(!sendRequest(buildOpenRequest) && count < 3) {
+      count++;
     }
-    
-    WiFly.closeConnection();
-  } else {
-    Serial << "Failed to connect to server at " << serverIp << endl;
+  } else if (previousState == 0 && currentState == 1) {
+    // Door closed
+    int count = 0;
+    while(!sendRequest(buildCloseRequest) && count < 3) {
+      count++;
+    }
   }
   
-  
-  // Free allocated memory
-  freeRequestStrings(request, header, body);
-  
-  #if DEBUG_ON
-  int freeMemoryFinish = freeMemory();
-  if (freeMemoryStart != freeMemoryFinish) {
-    Serial << "Memory leak detected:" << endl
-           << "Free memory before:" << freeMemoryStart << endl
-           << "Free memory after:" << freeMemoryFinish << endl;
-  }
-  #endif
-  
-  delay(5000);
+  delay(250);
 }
