@@ -10,7 +10,6 @@
 
 var nodemailer = require('nodemailer'),
     path = require('path'),
-//    templatesDir = path.resolve(__dirname, '..', 'views/mailer'),
     templatesDir = __dirname + '/../views/mailer',
     emailTemplates = require('email-templates');
 
