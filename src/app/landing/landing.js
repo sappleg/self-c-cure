@@ -19,8 +19,13 @@ angular.module('landing', function () {})
             };
 
             $scope.logout = function () {
-                //logout user
-                $location.path('/');
+                $http.post(endpoint + '/auth/logout/')
+                .success(
+                    function() {
+                        userData.clear();
+                        $location.path('/');
+                    }
+                )
             };
 
             $scope.jumpDevice = function () {
@@ -169,6 +174,10 @@ angular.module('landing', function () {})
                 this.user = u.user[0];
                 this.devices = u.devices;
             };
+            this.clear = function() {
+                this.user = {};
+                this.devices = {};
+            }
 
             return this;
         }]);
