@@ -37,7 +37,7 @@ void freeRequestStrings(char* queryString, char* header, char* body) {
 
 PString buildOpenRequest(char* requestPtr) {
   PString requestStr(requestPtr, REQUEST_BUFFER_SIZE);
-  requestStr << "GET " << deviceId << openEndpoint
+  requestStr << "POST " << deviceId << openEndpoint
     << " HTTP/1.1" << "\n"
     << "\n\n";
 }
@@ -50,6 +50,8 @@ PString buildCloseRequest(char* requestPtr) {
 }
 
 int sendRequest(PString (*buildRequest)(char*)) {
+  Serial << "Sending Request" << endl;
+  
    #if DEBUG_ON
   int freeMemoryStart = freeMemory();
   #endif
@@ -78,12 +80,11 @@ int sendRequest(PString (*buildRequest)(char*)) {
   if (WiFly.openConnection(serverIp)) {
     Serial << "Connected to server at " << serverIp<< endl
            << "Sending request: " << request << endl;
-    
     WiFly << request;
     
     while (WiFly.isConnectionOpen()) {
-      Serial << WiFly.read();
-    }
+      WiFly.read();
+    } 
     
     WiFly.closeConnection();
   } else {
@@ -147,13 +148,20 @@ void loop() {
   previousState = currentState;
   currentState = digitalRead(inputPin);
   
+  // Try each request up to 3 times upon failure
   if (previousState == 1 && currentState == 0) {
     // Door opened
-    sendRequest(buildOpenRequest);
+    int count = 0;
+    while(!sendRequest(buildOpenRequest) && count < 3) {
+      count++;
+    }
   } else if (previousState == 0 && currentState == 1) {
     // Door closed
-    sendRequest(buildCloseRequest); 
+    int count = 0;
+    while(!sendRequest(buildOpenRequest) && count < 3) {
+      count++;
+    }
   }
   
-  delay(5000);
+  delay(250);
 }
