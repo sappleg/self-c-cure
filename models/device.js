@@ -14,9 +14,9 @@ var Schema = mongoose.Schema,
         userId: Schema.Types.ObjectId,
         deviceId: String,
         limit: Number,
-        ranges: [],
+        ranges: Array,
         armed: Boolean
-    });
+    }, { strict: true });
 
 DeviceSchema.statics.getDevices = function(userId, cb) {
     if (userId) {
@@ -50,6 +50,14 @@ DeviceSchema.statics.getDeviceUserEmail = function(deviceId, cb) {
     if (deviceId) {
         mongoose.models.Device
             .find({ "deviceId": deviceId }, cb);
+    }
+}
+
+DeviceSchema.statics.getDeviceByUser = function(userId, deviceId, cb) {
+    if (userId && deviceId) {
+        var tmp = mongoose.Types.ObjectId(userId);
+        mongoose.models.Device
+            .findOne({ "deviceId": deviceId, "userId": mongoose.Types.ObjectId(userId) }, cb);
     }
 }
 

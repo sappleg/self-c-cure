@@ -30,15 +30,16 @@ app.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpPro
         $routeProvider.when('/', {
             controller: 'LoginCtrl',
             templateUrl: '/app/login/view/login.html'
-        }).when('/landing', {
+        }).when('/landing/:userId', {
             controller: 'LandingCtrl',
             templateUrl: '/app/landing/view/landing.html'
-        }).when('/device', {
+        }).when('/user/:userId/devices/:deviceId', {
             controller: 'DeviceCtrl',
             templateUrl: '/app/device/view/device.html'
         });
         $routeProvider.otherwise({redirectTo: '/'});
         $httpProvider.responseInterceptors.push('Authentication');
     }])
-    .value('endpoint', 'http://self-c-cure.thotpod.com:8142');
+//    .value('endpoint', 'http://self-c-cure.thotpod.com:8142');
+    .value('endpoint', 'http://localhost:8142');
 

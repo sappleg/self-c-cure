@@ -17,8 +17,30 @@
 
 angular.module('device', function () {})
 
-    .controller('DeviceCtrl', ['$scope', '$http', '$location', 'deviceData', 'userData', 'endpoint',
-        function($scope, $http, $location, deviceData, userData, endpoint) {
+    .controller('DeviceCtrl', ['$scope', '$http', '$location', '$routeParams', 'deviceData', 'userData', 'endpoint',
+        function($scope, $http, $location, $routeParams, deviceData, userData, endpoint) {
+            function loadDeviceData() {
+            var start = endpoint + '/user/',
+                userId = $routeParams.userId,
+                deviceId = $routeParams.deviceId,
+                device = '/devices/';
+            var path = start.concat(userId).concat(device).concat(deviceId);
+
+                $http.get(path).then(function(response) {
+                    console.log(response);
+                    deviceData.setDeviceData(response.data);
+
+                    $scope.device = deviceData.device;
+
+                    $scope.$watch('device.limit', function() {
+                        $scope.device.limit = $scope.device.limit >= 0 ? $scope.device.limit : 0;
+                    })
+                }, function(response) {
+                    console.log(response);
+                });
+            }
+
+            $scope.userData = userData;
 
             $scope.meta = {
                 editName: false,
@@ -26,8 +48,6 @@ angular.module('device', function () {})
                 upper: ''
             };
 
-            $scope.device = deviceData.device;
-            console.log($scope.device);
 
             $scope.addRange = function () {
                 if($scope.meta.lower.length == 4 && $scope.meta.upper.length == 4) {
@@ -87,10 +107,10 @@ angular.module('device', function () {})
 
 
             $scope.updateDevice = function () {
-                var start = path + '/user/',
+                var start = endpoint + '/user/',
                     userID = $scope.device.userId,
                     device = '/devices/',
-                    deviceID = $scope.device._id;
+                    deviceID = $scope.device.deviceId;
                 var path = start.concat(userID).concat(device).concat(deviceID);
                 var body = cleanData($scope.device);
 
@@ -101,8 +121,8 @@ angular.module('device', function () {})
 
                     var path = start.concat(userID);
                     $http.get(path).then(function(response) {
-                        userData.setUser(response.data);
-                        $location.path('/landing');
+                        userData.setUserData(response.data);
+                        $location.path('/landing/' + userID);
                     }, function(response) {
 
                     });
@@ -125,8 +145,8 @@ angular.module('device', function () {})
 
                     var path = start.concat(userID);
                     $http.get(path).then(function(response) {
-                        userData.setUser(response.data);
-                        $location.path('/landing');
+                        userData.setUserData(response.data);
+                        $location.path('/landing/' + userID);
                     }, function(response) {
 
                     });
@@ -140,7 +160,7 @@ angular.module('device', function () {})
                 var start = endpoint + '/user/',
                     userID = $scope.device.userId,
                     device = '/devices/',
-                    deviceID = $scope.device._id;
+                    deviceID = $scope.device.deviceId;
                 var path = start.concat(userID).concat(device).concat(deviceID);
                 $http.delete(path).then(function(response) {
                     console.log('shits deleted');
@@ -149,8 +169,8 @@ angular.module('device', function () {})
                     var path = start.concat(userID);
                     $http.get(path).then(function(response) {
                         console.log(response);
-                        userData.setUser(response.data);
-                        $location.path('/landing');
+                        userData.setUserData(response.data);
+                        $location.path('/landing/' + userID);
                     }, function(response) {
 
                     });
@@ -160,32 +180,12 @@ angular.module('device', function () {})
                 });
             }
 
-            $scope.back = function () {
-                var start = endpoint + '/user/',
-                    userID = $scope.device.userId;
-                var path = start.concat(userID);
-                $http.get(path).then(function(response) {
-                    userData.setUser(response.data);
-                    $location.path('/landing');
-                }, function(response) {
-
-                });
-                deviceData.device = {};
-                $location.path('/landing')
-            };
-
             $scope.cancel = function () {
                 var start = endpoint + '/user/',
                     userID = $scope.device.userId;
                 var path = start.concat(userID);
-                $http.get(path).then(function(response) {
-                    userData.setUser(response.data);
-                    $location.path('/landing');
-                }, function(response) {
-
-                });
                 deviceData.device = {};
-                $location.path('/landing');
+                $location.path('/landing/' + userID);
             }
 
             var cleanData = function (dirtyD) {
@@ -196,10 +196,11 @@ angular.module('device', function () {})
                 return copy;
             }
 
+            loadDeviceData();
         }])
     .service('deviceData', [
         function () {
             this.setDeviceData = function (d) {
-
+                this.device = d;
             }
         }]);

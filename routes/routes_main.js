@@ -19,6 +19,8 @@ app.get('/devices/:deviceId?/closed/', device.closed);
 app.put('/user/:userId?/devices/:deviceId?', device.update);
 app.delete('/user/:userId?/devices/:deviceId?', device.delete);
 
+app.get('/user/:userId?/devices/:deviceId?', device.get);
+
 /* Device creation and retrieval */
 app.get('/user/:userId?', device.retrieve);
 app.post('/user/:userId?/devices/', device.register);

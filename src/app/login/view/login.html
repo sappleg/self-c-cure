@@ -15,7 +15,7 @@
 
                     <div class="form-group">
                         <label for="inputPassword">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.pass">
+                        <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password">
                     </div>
                     <div class="form-group" ng-init="createAccount=false" data-ng-show="createAccount">
                         <label for="confirmPassword">Confirm Password</label>
@@ -23,9 +23,10 @@
                     </div>
                     <hr/>
                     <div class="login-submit-wrap">
-                        <button type="submit" class="btn btn-primary" ng-click="login()" ng-show="swag.createAccTxt=='Create Account'">Sign In <i class="glyphicon glyphicon-log-in"></i></button>
-                        <button type="submit" class="btn btn-success" ng-click="createAcc()" ng-hide="swag.createAccTxt=='Create Account'">Confirm</button>
-                        <button type="button" class="btn btn-{{swag.createAccBtn}}" ng-click="createAccountFields()">{{swag.createAccTxt}}</button>
+                        <button type="submit" class="btn btn-primary" ng-click="login()" ng-hide="createAccount">Sign In <i class="glyphicon glyphicon-log-in"></i></button>
+                        <button type="submit" class="btn btn-primary" ng-click="createAccountFields()" ng-hide="createAccount">CreateAccount<i class="glyphicon glyphicon-log-in"></i></button>
+                        <button type="submit" class="btn btn-success" ng-click="createAcc()" ng-show="createAccount">Confirm</button>
+                        <button type="button" class="btn btn-{{swag.createAccBtn}}" ng-click="createAccountFields()" ng-show="createAccount">Cancel</button>
                     </div>
                     {{meta.error}}
                 </form>

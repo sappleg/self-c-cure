@@ -38,18 +38,9 @@ exports.signup = function(req, res) {
 
 	user.save(function(err) {
 		if (err) {
-            res.send(err);
+            res.send(500, err);
 		} else {
-			req.session.user = {
-				id: user.get('id')
-			}
-
-			req.session.auth = {
-				loggedIn: true,
-				userId: user.get('id')
-			}
-
-            res.cookie(cookieName, encode(user.get('id')), { path: '/', expires: new Date(Date.now() + 900000), httpOnly: true });
+//            res.cookie(cookieName, encode(user.get('id')), { path: '/', expires: new Date(Date.now() + 900000), httpOnly: true });
             res.send(201);
 		}
 	});
@@ -77,7 +68,7 @@ exports.login = function(req, res, next) {
         } else {
             app.models.User.getUser(decode(req.cookies[cookieName]), function(err, decodedUser) {
                 if (err) {
-                    res.send(400, err);
+                    res.send(500, err);
                 } else {
                     if (decodedUser[0]) {
                         next();
@@ -90,6 +81,7 @@ exports.login = function(req, res, next) {
     }
 };
 
-exports.logout = function(res, req) {
-    res.clearCookie(cookieName);
+exports.logout = function(req, res) {
+    res.clearCookie(cookieName, { path: '/' });
+    res.send(200);
 };

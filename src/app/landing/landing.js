@@ -8,10 +8,22 @@
 
 
 angular.module('landing', function () {})
-    .controller('LandingCtrl', ['$scope', '$location', '$http', 'dummyData', 'userData', 'deviceData', 'endpoint',
-        function($scope, $location, $http, dummyData, userData, deviceData, endpoint) {
+    .controller('LandingCtrl', ['$scope', '$location', '$http', '$routeParams', 'dummyData', 'userData', 'deviceData', 'endpoint',
+        function($scope, $location, $http, $routeParams, dummyData, userData, deviceData, endpoint) {
+            function loadUserData() {
+                var start = endpoint + '/user/';
+                var id = $routeParams.userId;
+                var path = start.concat(id);
+
+                $http.get(path).then(function (response) {
+                    userData.setUserData(response.data)
+                }, function (response) {
+                    console.log(response);
+                })
+            }
+
             $scope.userData = userData;
-            console.log($scope.userData);
+
             $scope.meta = {
                 id: '',
                 name: '',
@@ -29,12 +41,12 @@ angular.module('landing', function () {})
             };
 
             $scope.jumpDevice = function () {
-                if($scope.meta.id.length == 24 && $scope.meta.name.length>0) {
+                if($scope.meta.id.length == 24 && $scope.meta.name.length > 0) {
 
                     //prep json for jump
                     var device = {
                         name: $scope.meta.name,
-                        userId: $scope.user.user._id,
+                        userId: userData.user._id,
                         deviceId: $scope.meta.id,
                         limit: null,
                         ranges: [],
@@ -42,8 +54,12 @@ angular.module('landing', function () {})
                     };
 
                     console.log(device);
+                    $http.post(endpoint + '/user/' + device.userId + '/devices/', device).then(function() {
+                        $http.get(endpoint + '/user/' + device.userId).then(function(data) {
+                            userData.setUserData(data.data);
+                        });
+                    });
                     deviceData.setDeviceData(device);
-                    $location.path('/device');
                 }
                 else if($scope.meta.name = '') {
                     $scope.meta.error = 'Give your device a name';
@@ -56,16 +72,16 @@ angular.module('landing', function () {})
             $scope.goToDevice = function ($index) {
                 console.log($scope.userData.devices[$index]);
                 deviceData.setDeviceData($scope.userData.devices[$index]);
-                $location.path('/device');
+                $location.path('/user/' + $scope.userData.user._id + '/devices/' + $scope.userData.devices[$index].deviceId);
             };
 
             $scope.activateDevice = function ($index) {
                 $scope.userData.devices[$index].armed = true;
 
                 var start = endpoint + '/user/',
-                    userID = $scope.user.user._id,
+                    userID = $scope.userData.user._id,
                     device = '/devices/',
-                    deviceID = $scope.userData.devices[$index]._id;
+                    deviceID = $scope.userData.devices[$index].deviceId;
                 var path = start.concat(userID).concat(device).concat(deviceID);
                 var body = cleanData($scope.userData.devices[$index]);
 
@@ -75,7 +91,7 @@ angular.module('landing', function () {})
                     var path = start.concat(userID);
                     $http.get(path).then(function(response) {
                         userData.setUserData(response.data);
-                        $location.path('/landing');
+                        $location.path('/landing/' + userID);
                     }, function(response) {
 
                     });
@@ -88,9 +104,9 @@ angular.module('landing', function () {})
                 $scope.userData.devices[$index].armed = false;
 
                 var start = endpoint + '/user/',
-                    userID = $scope.user.user._id,
+                    userID = $scope.userData.user._id,
                     device = '/devices/',
-                    deviceID = $scope.userData.devices[$index]._id;
+                    deviceID = $scope.userData.devices[$index].deviceId;
                 var path = start.concat(userID).concat(device).concat(deviceID);
                 var body = cleanData($scope.userData.devices[$index]);
 
@@ -102,7 +118,7 @@ angular.module('landing', function () {})
                     var path = start.concat(userID);
                     $http.get(path).then(function(response) {
                         userData.setUserData(response.data);
-                        $location.path('/landing');
+                        $location.path('/landing/' + userID);
                     }, function(response) {
 
                     });
@@ -118,6 +134,8 @@ angular.module('landing', function () {})
                 delete copy['_id'];
                 return copy;
             }
+
+            loadUserData();
     }])
     .service('dummyData', [
         function () {

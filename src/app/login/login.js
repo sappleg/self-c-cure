@@ -30,24 +30,24 @@ angular.module('login', function () {})
             var path = endpoint + '/auth/login/',
                 body = JSON.stringify({
                     "email": $scope.user.email,
-                    "pass": $scope.user.pass
+                    "pass": $scope.user.password
                 });
             $http.post(path, body).then(function(response) {
                 if(response.status == '200' && response.data.message != "Validation failed") {
                     $scope.user.email = '';
-                    $scope.user.pass = '';
-                    //GET devices
-                    var start = endpoint + '/user/';
-                    var id = response.data.id;
-                    var path = start.concat(id);
-
-
-                    $http.get(path).then(function (response) {
-                        userData.setUserData(response.data);
-                        $location.path('/landing');
-                    }, function (response) {
-                        console.log(response);
-                    })
+                    $scope.user.password = '';
+                    $location.path('/landing/' + response.data.id);
+//                    //GET devices
+//                    var start = endpoint + '/user/';
+//                    var id = response.data.id;
+//                    var path = start.concat(id);
+//
+//                    $http.get(path).then(function (response) {
+////                        userData.setUserData(response.data)
+//                        $location.path('/landing');
+//                    }, function (response) {
+//                        console.log(response);
+//                    })
                 }
                 else {
                     $scope.meta.error = "Shit something went wrong, please try again."
@@ -84,15 +84,9 @@ angular.module('login', function () {})
                         "email": $scope.user.email,
                         "pass": $scope.user.password
                     });
-                $http.post(path, body).then(function(response) {
-                    console.log(response);
-
-                    if(response.status == '201') {
-                        $location.path('/landing');
-                    }
-                    else {
-                        $scope.meta.error = "Shit something went wrong, please try again."
-                    }
+                $http.post(path, body).then(function() {
+                    $scope.meta.error = "Your account has been successfully created";
+                    $scope.createAccount = false;
                 }, function(response) {
                     console.log(response);
                 });

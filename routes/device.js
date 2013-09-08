@@ -115,3 +115,13 @@ exports.closed = function(req, res) {
         }
     });
 }
+
+exports.get = function(req, res) {
+    app.models.Device.getDeviceByUser(req.param('userId'), req.param('deviceId'), function(err, device) {
+        if (device) {
+            res.send(device);
+        } else {
+            res.send(403);
+        }
+    });
+}
