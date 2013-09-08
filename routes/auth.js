@@ -40,13 +40,14 @@ exports.signup = function(req, res) {
 		if (err) {
             res.send(500, err);
 		} else {
-//            res.cookie(cookieName, encode(user.get('id')), { path: '/', expires: new Date(Date.now() + 900000), httpOnly: true });
             res.send(201);
 		}
 	});
 };
 
 exports.login = function(req, res, next) {
+    var a = req.url.split('/').splice(3, req.url.split('/').length - 2)[0];
+    var b = req.url.split('/').splice(3, req.url.split('/').length - 2)[2];
     if (req.url == '/auth/login/') {
         app.models.User.login(req.body.email, req.body.pass, function(err, user) {
             if (err) {
@@ -61,6 +62,10 @@ exports.login = function(req, res, next) {
             }
         });
     } else if (req.url == '/auth/signup/') {
+        next();
+    } else if ((a+b) == 'devicesopen') {
+        next();
+    } else if ((a+b) == 'devicesclosed') {
         next();
     } else {
         if (!req.cookies[cookieName]) {
