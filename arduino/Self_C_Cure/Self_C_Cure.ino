@@ -37,14 +37,14 @@ void freeRequestStrings(char* queryString, char* header, char* body) {
 
 PString buildOpenRequest(char* requestPtr) {
   PString requestStr(requestPtr, REQUEST_BUFFER_SIZE);
-  requestStr << "POST " << deviceId << openEndpoint
+  requestStr << "GET " << deviceId << openEndpoint
     << " HTTP/1.1" << "\n"
     << "\n\n";
 }
 
 PString buildCloseRequest(char* requestPtr) {
   PString requestStr(requestPtr, REQUEST_BUFFER_SIZE);
-  requestStr << "POST " << deviceId << closeEndpoint
+  requestStr << "GET " << deviceId << closeEndpoint
     << " HTTP/1.1" << "\n"
     << "\n\n";
 }
